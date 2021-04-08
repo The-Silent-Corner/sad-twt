@@ -3,7 +3,10 @@ const Models = require("./Models");
 
 async function createTables() {
   await db.authenticate();
-  await Models.ExampleModel.sync();
+  await Models.Student.sync();
+  await Models.Parent.sync();
+  await Models.Tutor.sync();
+//   await Models.Parent_Student.sync();
 }
 
 module.exports = {
