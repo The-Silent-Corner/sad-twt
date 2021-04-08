@@ -1,10 +1,10 @@
 const db = require("../");
 const { DataTypes } = require("sequelize");
 
-const Tutor = db.define('Tutor', {
+const Tutor = db.define("Tutor", {
   tutor_id:{
     primaryKey: true,
-    type: DataTypes.STRING,
+    type: DataTypes.STRING
   },
   first_name:{
     type: DataTypes.STRING,
