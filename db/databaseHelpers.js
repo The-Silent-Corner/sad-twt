@@ -3,11 +3,9 @@ const Models = require("./Models");
 
 async function createTables() {
   await db.authenticate();
-  // await Models.Student.sync({ force: true });
-  // await Models.Parent.sync({ force: true });
-  await Models.Parent.Student.sync({ force: true });
-  await Models.Parent.Parent.sync({ force: true });
-  // await Models.Parent_Student.sync();
+  await Models.Parent.sync({force: true});
+  await Models.Student.sync({force: true});
+  await Models.Tutor.sync({force:true});
 }
 
 module.exports = {
