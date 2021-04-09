@@ -3,6 +3,7 @@ const Models = require("./Models");
 
 async function createTables() {
   await db.authenticate();
+  await Models.ParentStudent.sync({ force:true });
   await Models.Parent.sync({ force: true });
   await Models.Student.sync({ force: true });
   await Models.Tutor.sync({ force:true });
@@ -11,9 +12,9 @@ async function createTables() {
 module.exports = {
   createTables: createTables,
   wipeDBTables: async() => {
+    await Models.ParentStudent.drop();
     await Models.Student.drop();
     await Models.Parent.drop();
     await Models.Tutor.drop();
-    await createTables();
   }
 };
