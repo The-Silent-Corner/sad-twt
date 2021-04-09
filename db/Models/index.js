@@ -84,10 +84,6 @@ const Tutor = db.define("Tutor", {
   bio:{
     type: DataTypes.STRING,
     allowNull: true
-  },
-  student_id: {
-    type: DataTypes.STRING,
-    allowNull: true
   }
 });
 
