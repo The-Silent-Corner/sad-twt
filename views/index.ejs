@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <%- include("partials/headings.ejs") %>
+    <title>Home Page</title>
+</head>
+<body class="has-navbar-fixed-top">
+<%- include("partials/navbar-normal.ejs") %>
+<section class="hero is-fullheight has-text-light mb-6">
+    <img src="assets/people-woman-coffee-meeting.jpg" alt="banner_pic" class="hero-background" />
+    <div class="hero-body">
+        <div id="modal-text">
+            <h1 class="title has-text-light">Trustworthy Tutors</h1>
+            <p>Join us for good grades</p>
+            <div>
+                <button class="button mt-4">Register</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="container column has-text-centered">
+    <div class="title">About Us</div>
+    <div class="columns mt-6">
+        <div class="column">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-header-title is-centered">Math</div>
+                </div>
+            </div>
+        </div>
+        <div class="column">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-header-title is-centered">Science</div>
+                </div>
+                <div class="card-image">
+                    <img src="assets/technology.jpeg" alt="">
+                </div>
+            </div>
+        </div>
+        <div class="column">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-header-title is-centered">Technology</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+</body>
+</html>
