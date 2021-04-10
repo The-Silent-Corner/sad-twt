@@ -8,7 +8,9 @@
     <title>Home Page</title>
 </head>
 <body class="has-navbar-fixed-top">
+
 <%- include("partials/navbar-normal.ejs") %>
+
 <section class="hero is-fullheight has-text-light mb-6">
     <img src="assets/people-woman-coffee-meeting.jpg" alt="banner_pic" class="hero-background" />
     <div class="hero-body">
@@ -22,13 +24,29 @@
     </div>
 </section>
 
+<section class="container column">
+    <div class="title has-text-centered">About Us</div>
+    <p>
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Autem deleniti dolores, dolorum eaque eos facilis fuga hic id labore molestias nam numquam obcaecati odit, quis quos reprehenderit, sunt tempora voluptatibus.
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium assumenda ducimus excepturi, expedita illo impedit laborum mollitia natus nemo nulla quaerat quia. Corporis ipsa iure minima neque perspiciatis quia sit.
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Commodi ea est eum iusto nemo. Facilis nam quia quis repudiandae tenetur ut. Autem cupiditate dicta incidunt minus numquam sequi veritatis vero.
+    </p>
+</section>
+
 <section class="container column has-text-centered">
-    <div class="title">About Us</div>
     <div class="columns mt-6">
         <div class="column">
             <div class="card">
                 <div class="card-header">
                     <div class="card-header-title is-centered">Math</div>
+                </div>
+                <div class="card-image">
+                    <img src="assets/math.jpeg" alt="science.jpeg">
+                </div>
+                <div class="modal-card-body has-text-left">
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci optio possimus reprehenderit sunt. Animi,
+                    culpa distinctio ea eos minima omnis quasi saepe sapiente similique ullam? Commodi deserunt necessitatibus quis
+                    repellat!
                 </div>
             </div>
         </div>
@@ -40,6 +58,11 @@
                 <div class="card-image">
                     <img src="assets/technology.jpeg" alt="">
                 </div>
+                <div class="modal-card-body has-text-left">
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci optio possimus reprehenderit sunt. Animi,
+                    culpa distinctio ea eos minima omnis quasi saepe sapiente similique ullam? Commodi deserunt necessitatibus quis
+                    repellat!
+                </div>
             </div>
         </div>
         <div class="column">
@@ -47,10 +70,41 @@
                 <div class="card-header">
                     <div class="card-header-title is-centered">Technology</div>
                 </div>
+                <div class="card-image">
+                    <img src="assets/science.jpeg" alt="science.jpeg">
+                </div>
+                <div class="modal-card-body has-text-left">
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci optio possimus reprehenderit sunt. Animi,
+                    culpa distinctio ea eos minima omnis quasi saepe sapiente similique ullam? Commodi deserunt necessitatibus quis
+                    repellat!
+                </div>
             </div>
         </div>
     </div>
 </section>
+
+<section class="container column is-half">
+    <div class="title has-text-centered">Contact Us</div>
+    <form action="/contact" method="post">
+        <label class="label" for="first-name">
+            First Name
+            <input type="text" class="input">
+        </label>
+        <label for="last-name" class="label">
+            Last Name
+            <input type="text" class="input">
+        </label>
+        <label for="email" class="label">
+            Email
+            <input type="email" class="input">
+        </label>
+        <div class="has-text-centered">
+            <button class="button has-text-centered">Contact</button>
+        </div>
+    </form>
+</section>
+
+<%- include("partials/footer") %>
 
 </body>
 </html>
