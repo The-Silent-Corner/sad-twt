@@ -21,14 +21,17 @@
             </label>
             <label for="password" class="label">
                 Password
-                <input type="password" class="input" required name="password1">
+                <input id="register-password1" type="password" class="input" required name="password1">
             </label>
             <label for="password-confirm" class="label">
                 Confirm password
-                <input type="password" class="input" required name="password2">
+                <input id="register-password2" type="password" class="input" required name="password2">
             </label>
             <div class="container column has-text-centered">
-                <button class="button">Register</button>
+                <div id="register-button-notification" class="notification is-danger is-light" hidden>
+                    Passwords do not match
+                </div>
+                <button id="register-button" class="button">Register</button>
             </div>
         </div>
     </form>
@@ -38,3 +41,40 @@
 
 </body>
 </html>
+
+<script>
+  let pw2ChangedYet = false;
+  function setClasses() {
+
+  }
+
+  function checkPasswordEquality() {
+    const p1 = $("#register-password1").val()
+    const p2 = $("#register-password2").val()
+
+    if(!pw2ChangedYet) {
+      return;
+    }
+
+    if(p1 !== p2) {
+      $("#register-password1").addClass("is-danger");
+      $("#register-password2").addClass("is-danger");
+      $("#register-button-notification").show();
+      $("#register-button").attr("disabled", true)
+    } else {
+      $("#register-password1").removeClass("is-danger");
+      $("#register-password2").removeClass("is-danger");
+      $("#register-button-notification").hide();
+      $("#register-button").attr("disabled", false)
+    }
+  }
+
+  $("#register-password1").on("keyup", () => {
+    checkPasswordEquality();
+  })
+
+  $("#register-password2").on("keyup", () => {
+    pw2ChangedYet = true
+    checkPasswordEquality();
+  })
+</script>
