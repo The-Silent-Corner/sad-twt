@@ -7,7 +7,6 @@ function databaseSettings() {
   let logging;
   if(process.env.NODE_ENV === "test") {
     dialect = "sqlite";
-    dbPath = path.resolve("db/database_test.sqlite3");
     logging = false;
   } else if(process.env.NODE_ENV === "production") {
     dialect = "sqlite";

@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node .",
-    "test": "jest --coverage --silent",
+    "test": "jest",
     "lint": "eslint .",
     "dev": "nodemon .",
     "migrate": "node ./db/__migrateDb__.js"
