@@ -1,5 +1,5 @@
 const { createTables } = require("../db/databaseHelpers");
-const { Student, Parent } = require("../db/Models");
+const { Student, Parent, Tutor } = require("../db/Models");
 
 beforeAll(async() => {
   await createTables();
@@ -53,3 +53,27 @@ describe("Student Model", () => {
   });
 });
 
+describe("Tutor Model", () =>{
+  let tutor;
+  const testTutorData = {
+    tutor_id: "1234",
+    first_name: "Jim",
+    last_name: "Moua",
+    email: "jmoua@",
+    gender: "M",
+    password: "Skyrim",
+    bio: "I love to code"
+  };
+  test("inserting values into Tutor table", async() =>{
+    try{
+      await Tutor.create(testTutorData);
+      const tutorResults = await Tutor.findOne({ where: { tutor_id: "1234" } });
+      expect(tutorResults).toBeDefined();
+      expect(tutorResults.tutor_id).toEqual("1234");
+    }catch(err) {
+      console.log("could not insert data into Tutor Table");
+      console.error(err);
+    }
+
+  });
+});
