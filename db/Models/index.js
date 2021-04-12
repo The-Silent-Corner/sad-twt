@@ -123,6 +123,26 @@ const Courses = db.define("Courses", {
     allowNull: false
   }
 });
+
+const Appointment = db.define("Appointments", {
+  appointment_id: {
+    type: DataTypes.STRING,
+    primaryKey: true
+  },
+  status: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  time: {
+    type: DataTypes.DATE,
+    allowNull: false
+  },
+  location: {
+    type: DataTypes.STRING,
+    allowNull: false
+  }
+});
+
 const ParentStudent = db.define("ParentStudent", {
   student_id: { type: DataTypes.STRING, isPrimary: true },
   parent_id: { type: DataTypes.STRING, isPrimary: true }
@@ -139,11 +159,17 @@ Student.hasMany(Messages, { foreignKey: "student_id", foreignKeyConstraint:true 
 //Courses
 Tutor.hasMany(Courses, { foreignKey: "tutor_id", foreignKeyConstraint:true });
 
+// Appointments
+Appointment.belongsTo(Student, { foreignKey: "student_id", foreignKeyConstraint: true });
+Appointment.belongsTo(Tutor, { foreignKey: "tutor_id", foreignKeyConstraint: true });
+Appointment.belongsTo(Courses, { foreignKey: "course_id", foreignKeyConstraint: true });
+
 module.exports = {
   Student: Student,
   Parent: Parent,
   Tutor: Tutor,
   ParentStudent: ParentStudent,
   Messages: Messages,
-  Courses: Courses
+  Courses: Courses,
+  Appointment: Appointment
 };
