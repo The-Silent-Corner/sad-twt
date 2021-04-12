@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <%- include("partials/headings.ejs") %>
+    <title>Login</title>
+</head>
+<body class="has-navbar-fixed-top">
+
+<%- include("partials/navbar-normal.ejs") %>
+
+<section class="section column">
+    <h1 class="title has-text-centered">Login</h1>
+    <form action="/" method="post">
+        <div class="container column is-half">
+            <label for="email" class="label">
+                Email
+                <input type="email" class="input" required name="email">
+            </label>
+            <label for="password" class="label">
+                Password
+                <input type="password" required class="input" name="password">
+            </label>
+            <div class="container column has-text-centered">
+                <button class="button">Login</button>
+            </div>
+        </div>
+    </form>
+</section>
+
+<%- include("partials/footer.ejs") %>
+
+</body>
+</html>
