@@ -1,5 +1,5 @@
 const { createTables, wipeDBTables } = require("../db/databaseHelpers");
-const { Student, Parent, Tutor, Messages } = require("../db/Models");
+const { Student, Parent, Tutor, Messages, Courses } = require("../db/Models");
 
 beforeAll(async() => {
   await createTables();
@@ -119,3 +119,32 @@ describe("Message Model", () =>{
     expect(tutorForeignKeyCheck).toBeDefined();
   });
 });
+describe("Courses Model", () =>{
+  const testCoursesData = {
+    course_id: "777",
+    course_name: "IT Project Management",
+    initial_session_price: "100",
+    session_hourly_rate: "12.50",
+    tutor_id: "1234"
+  };
+  const testTutorData = {
+    tutor_id: "1234",
+    first_name: "Jim",
+    last_name: "Moua",
+    email: "jmoua@",
+    gender: "M",
+    password: "Skyrim",
+    bio: "I love to code"
+  };
+  beforeAll(async() =>{
+    await wipeDBTables();
+    await createTables();
+    await Tutor.create(testTutorData);
+    await Courses.create(testCoursesData);
+  });
+  test("inserting data into Courses Model", async() =>{
+    const insertTest = Courses.findOne({ where:{ course_id: "777" } });
+    expect(insertTest).toBeDefined();
+  });
+});
+

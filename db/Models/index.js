@@ -105,21 +105,45 @@ const Messages = db.define("Messages", {
     allowNull:  false
   }
 });
+const Courses = db.define("Courses", {
+  courses_id:{
+    primaryKey: true,
+    type: DataTypes.STRING
+  },
+  course_name:{
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  initial_session_price:{
+    type: DataTypes.INTEGER,
+    allowNull: false
+  },
+  session_hourly_rate:{
+    type: DataTypes.INTEGER,
+    allowNull: false
+  }
+});
 const ParentStudent = db.define("ParentStudent", {
   student_id: { type: DataTypes.STRING, isPrimary: true },
   parent_id: { type: DataTypes.STRING, isPrimary: true }
 });
+
 //Student and Parent Joint Table
 Parent.belongsToMany(Student, { through: ParentStudent, foreignKey: "student_id", foreignKeyConstraint: true });
 Student.belongsToMany(Parent, { through: ParentStudent, foreignKey: "parent_id", foreignKeyConstraint: true });
+
 //Messages
 Tutor.hasMany(Messages, { foreignKey: "tutor_id", foreignKeyConstraint:true });
 Student.hasMany(Messages, { foreignKey: "student_id", foreignKeyConstraint:true });
+
+//Courses
+Tutor.hasMany(Courses, { foreignKey: "tutor_id", foreignKeyConstraint:true });
 
 module.exports = {
   Student: Student,
   Parent: Parent,
   Tutor: Tutor,
   ParentStudent: ParentStudent,
-  Messages: Messages
+  Messages: Messages,
+  Courses: Courses
 };

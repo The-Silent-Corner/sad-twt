@@ -8,6 +8,7 @@ async function createTables() {
   await Models.Student.sync({ force: true });
   await Models.Tutor.sync({ force:true });
   await Models.Messages.sync({ force:true });
+  await Models.Courses.sync({ force:true });
 }
 
 module.exports = {
@@ -17,6 +18,7 @@ module.exports = {
     await Models.ParentStudent.drop();
     await Models.Student.drop();
     await Models.Parent.drop();
+    await Models.Courses.drop();
     await Models.Tutor.drop();
   }
 };
