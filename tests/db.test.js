@@ -1,5 +1,5 @@
-const { createTables } = require("../db/databaseHelpers");
-const { Student, Parent, Tutor } = require("../db/Models");
+const { createTables, wipeDBTables } = require("../db/databaseHelpers");
+const { Student, Parent, Tutor, Messages } = require("../db/Models");
 
 beforeAll(async() => {
   await createTables();
@@ -54,7 +54,6 @@ describe("Student Model", () => {
 });
 
 describe("Tutor Model", () =>{
-  let tutor;
   const testTutorData = {
     tutor_id: "1234",
     first_name: "Jim",
@@ -75,5 +74,48 @@ describe("Tutor Model", () =>{
       console.error(err);
     }
 
+  });
+ 
+});
+describe("Message Model", () =>{
+  const testMessageData = {
+    message_id: "0000",
+    message: "hello there mate",
+    time_sent: new Date(),
+    sender: "STUDENT",
+    student_id: "1",
+    tutor_id: "1234"
+  };
+  const testStudentData = {
+    student_id: "1",
+    first_name: "Tou",
+    last_name: "Xiong",
+    email: "txiong@",
+    gender: "M",
+    password: "1234"
+  };
+  const testTutorData = {
+    tutor_id: "1234",
+    first_name: "Jim",
+    last_name: "Moua",
+    email: "jmoua@",
+    gender: "M",
+    password: "Skyrim",
+    bio: "I love to code"
+  };
+  beforeAll(async() => {
+    await wipeDBTables();
+    await createTables();
+    await Student.create(testStudentData);
+    await Tutor.create(testTutorData);
+    await Messages.create(testMessageData);
+  });
+  test("student_id foreign key check", async() =>{
+    const studentForeignKeyCheck = await Messages.findOne({ where:{ student_id: "1" } });
+    expect(studentForeignKeyCheck).toBeDefined();
+  });
+  test("tutor_id foreign key check", async() =>{
+    const tutorForeignKeyCheck = await Messages.findOne({ where:{ tutor_id: "1234" } });
+    expect(tutorForeignKeyCheck).toBeDefined();
   });
 });
