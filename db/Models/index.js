@@ -142,7 +142,24 @@ const Appointment = db.define("Appointments", {
     allowNull: false
   }
 });
-
+const Transactions = db.define("Transactions", {
+  transaction_id:{
+    primaryKey: true,
+    type: DataTypes.STRING
+  },
+  status:{
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  amount:{
+    type: DataTypes.INTEGER,
+    allowNull: false
+  },
+  date_paid: {
+    type: DataTypes.DATE,
+    allowNull: false
+  }
+});
 const ParentStudent = db.define("ParentStudent", {
   student_id: { type: DataTypes.STRING, isPrimary: true },
   parent_id: { type: DataTypes.STRING, isPrimary: true }
@@ -164,6 +181,9 @@ Appointment.belongsTo(Student, { foreignKey: "student_id", foreignKeyConstraint:
 Appointment.belongsTo(Tutor, { foreignKey: "tutor_id", foreignKeyConstraint: true });
 Appointment.belongsTo(Courses, { foreignKey: "course_id", foreignKeyConstraint: true });
 
+//Transactions
+Transactions.belongsTo(Appointment, { foreignKey: "appointment_id", foreignKeyConstraint:true });
+
 module.exports = {
   Student: Student,
   Parent: Parent,
@@ -171,5 +191,6 @@ module.exports = {
   ParentStudent: ParentStudent,
   Messages: Messages,
   Courses: Courses,
-  Appointment: Appointment
+  Appointment: Appointment,
+  Transactions: Transactions
 };
