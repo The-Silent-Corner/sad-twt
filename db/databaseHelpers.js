@@ -10,12 +10,14 @@ async function createTables() {
   await Models.Messages.sync({ force:true });
   await Models.Courses.sync({ force:true });
   await Models.Appointment.sync({ force: true });
+  await Models.Transactions.sync({force:true});
 }
 
 module.exports = {
   createTables: createTables,
   wipeDBTables: async() => {
     await Models.Messages.drop();
+    await Models.Transactions.drop();
     await Models.Appointment.drop();
     await Models.ParentStudent.drop();
     await Models.Student.drop();

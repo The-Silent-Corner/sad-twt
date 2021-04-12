@@ -1,3 +1,4 @@
+
 const { createTables, wipeDBTables } = require("../db/databaseHelpers");
 const {
   Student,
@@ -5,13 +6,21 @@ const {
   Tutor,
   Messages,
   Courses,
-  Appointment
+  Appointment,
+  Transactions
 } = require("../db/Models");
 
 beforeAll(async() => {
   await createTables();
 });
 
+const testTransactionsData = {
+  transaction_id: "222",
+  status: "Pending",
+  Amount: "5000",
+  date_paid: Date(),
+  appointment_id: "fooid"
+}
 const testStudentData = {
   student_id: "1",
   first_name: "Tou",
@@ -30,11 +39,20 @@ const testTutorData = {
   bio: "I love to code"
 };
 const testCoursesData = {
-  course_id: "777",
+  courses_id: "777",
   course_name: "IT Project Management",
   initial_session_price: "100",
   session_hourly_rate: "12.50",
   tutor_id: "1234"
+};
+const appointmentTestData = {
+  appointment_id: "fooid",
+  status: "COMPLETE",
+  time: new Date(),
+  location: "library",
+  tutor_id: testTutorData.tutor_id,
+  student_id: testStudentData.student_id,
+  courses_id: testCoursesData.courses_id
 };
 
 describe("Student Model", () => {
@@ -151,21 +169,12 @@ describe("Courses Model", () =>{
     await Courses.create(testCoursesData);
   });
   test("inserting data into Courses Model", async() =>{
-    const insertTest = Courses.findOne({ where:{ course_id: "777" } });
+    const insertTest = Courses.findOne({ where:{ courses_id: "777" } });
     expect(insertTest).toBeDefined();
   });
 });
 
 describe("Appointment Model", function() {
-  const appointmentTestData = {
-    appointment_id: "fooid",
-    status: "COMPLETE",
-    time: new Date(),
-    location: "library",
-    tutor_id: testTutorData.tutor_id,
-    student_id: testStudentData.student_id,
-    course_id: testCoursesData.course_id
-  };
   beforeAll(async() => {
     await wipeDBTables();
     await createTables();
@@ -181,5 +190,18 @@ describe("Appointment Model", function() {
   it("should be defined in the database", async() => {
     const apt = await Appointment.findOne({ where: { appointment_id: appointmentTestData.appointment_id } });
     expect(apt).toBeDefined();
+    expect(apt).not.toBeNull();
+  });
+});
+describe("Transactions Model", () => {
+  beforeAll(async() => {
+    await wipeDBTables();
+    await createTables();
+    await Appointment.create(appointmentTestData);
+    await Transactions.create(testTransactionsData);
+  });
+  test("Inserting data into Transactions model", async() =>{
+    const transactionTest = await Transactions.findOne({where:{transaction_id: testTransactionsData.transaction_id}});
+    expect(transactionTest).toBeDefined();
   });
 });
