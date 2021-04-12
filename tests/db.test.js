@@ -1,9 +1,41 @@
 const { createTables, wipeDBTables } = require("../db/databaseHelpers");
-const { Student, Parent, Tutor, Messages, Courses } = require("../db/Models");
+const {
+  Student,
+  Parent,
+  Tutor,
+  Messages,
+  Courses,
+  Appointment
+} = require("../db/Models");
 
 beforeAll(async() => {
   await createTables();
 });
+
+const testStudentData = {
+  student_id: "1",
+  first_name: "Tou",
+  last_name: "Xiong",
+  email: "txiong@",
+  gender: "M",
+  password: "1234"
+};
+const testTutorData = {
+  tutor_id: "1234",
+  first_name: "Jim",
+  last_name: "Moua",
+  email: "jmoua@",
+  gender: "M",
+  password: "Skyrim",
+  bio: "I love to code"
+};
+const testCoursesData = {
+  course_id: "777",
+  course_name: "IT Project Management",
+  initial_session_price: "100",
+  session_hourly_rate: "12.50",
+  tutor_id: "1234"
+};
 
 describe("Student Model", () => {
   let student;
@@ -86,23 +118,6 @@ describe("Message Model", () =>{
     student_id: "1",
     tutor_id: "1234"
   };
-  const testStudentData = {
-    student_id: "1",
-    first_name: "Tou",
-    last_name: "Xiong",
-    email: "txiong@",
-    gender: "M",
-    password: "1234"
-  };
-  const testTutorData = {
-    tutor_id: "1234",
-    first_name: "Jim",
-    last_name: "Moua",
-    email: "jmoua@",
-    gender: "M",
-    password: "Skyrim",
-    bio: "I love to code"
-  };
   beforeAll(async() => {
     await wipeDBTables();
     await createTables();
@@ -120,13 +135,6 @@ describe("Message Model", () =>{
   });
 });
 describe("Courses Model", () =>{
-  const testCoursesData = {
-    course_id: "777",
-    course_name: "IT Project Management",
-    initial_session_price: "100",
-    session_hourly_rate: "12.50",
-    tutor_id: "1234"
-  };
   const testTutorData = {
     tutor_id: "1234",
     first_name: "Jim",
@@ -148,3 +156,30 @@ describe("Courses Model", () =>{
   });
 });
 
+describe("Appointment Model", function() {
+  const appointmentTestData = {
+    appointment_id: "fooid",
+    status: "COMPLETE",
+    time: new Date(),
+    location: "library",
+    tutor_id: testTutorData.tutor_id,
+    student_id: testStudentData.student_id,
+    course_id: testCoursesData.course_id
+  };
+  beforeAll(async() => {
+    await wipeDBTables();
+    await createTables();
+    await Student.create(testStudentData);
+    await Tutor.create(testTutorData);
+    await Courses.create(testCoursesData);
+    try {
+      await Appointment.create(appointmentTestData);
+    } catch(err) {
+      console.error(err);
+    }
+  });
+  it("should be defined in the database", async() => {
+    const apt = await Appointment.findOne({ where: { appointment_id: appointmentTestData.appointment_id } });
+    expect(apt).toBeDefined();
+  });
+});
