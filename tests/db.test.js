@@ -17,10 +17,10 @@ beforeAll(async() => {
 const testTransactionsData = {
   transaction_id: "222",
   status: "Pending",
-  Amount: "5000",
+  amount: "5000",
   date_paid: Date(),
   appointment_id: "fooid"
-}
+};
 const testStudentData = {
   student_id: "1",
   first_name: "Tou",
@@ -197,11 +197,14 @@ describe("Transactions Model", () => {
   beforeAll(async() => {
     await wipeDBTables();
     await createTables();
+    await Student.create(testStudentData);
+    await Tutor.create(testTutorData);
+    await Courses.create(testCoursesData);
     await Appointment.create(appointmentTestData);
     await Transactions.create(testTransactionsData);
   });
   test("Inserting data into Transactions model", async() =>{
-    const transactionTest = await Transactions.findOne({where:{transaction_id: testTransactionsData.transaction_id}});
+    const transactionTest = await Transactions.findOne({ where:{ transaction_id: testTransactionsData.transaction_id } });
     expect(transactionTest).toBeDefined();
   });
 });
