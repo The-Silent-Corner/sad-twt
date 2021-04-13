@@ -94,7 +94,7 @@ describe("Student Model", () => {
 
   it("has many parents", async() => {
     let p2d = { ...testParentData, parent_id: "p2id" },
-      p3d = { ...testParentData, parent_id: "p3id" };
+      p3d = { ...testParentData, parent_id: "p3id", email: "xiong@" };
     const p2 = await Parent.create(p2d);
     const p3 = await Parent.create(p3d);
     await student.addParents([p2, p3]);
