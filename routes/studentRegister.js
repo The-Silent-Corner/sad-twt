@@ -17,6 +17,10 @@ router.post("/", async(req, res) =>{
     bio: bio,
     password: null
   };
+  if(!first_name || !last_name || !email || !gender || !password)
+  {
+    return res.sendStatus(400);
+  }
   studentData.password = await bcrypt.hash(password, saltRounds);
   try{
     await Student.create(studentData);
