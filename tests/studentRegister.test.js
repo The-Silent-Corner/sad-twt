@@ -13,7 +13,8 @@ describe("POST /register/student", () => {
   it("should register the student", async() => {
     const res = await request(app)
       .post("/register/student")
-      .send({ first_name: "Tou",
+      .send({ 
+        first_name: "Tou",
         last_name: "Xiong",
         email: "txiong@",
         gender: "M",
