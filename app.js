@@ -14,6 +14,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 app.set("view engine", "ejs");
 app.use("/register/student", require("./routes/studentRegister"));
+app.use("/register/parent", require("./routes/parentRegister"));
+
 
 /**
  * Define your routes below, or pass them around to an Express router.
