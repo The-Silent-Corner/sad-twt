@@ -17,10 +17,14 @@ router.post("/", async(req, res) =>{
     bio: bio,
     password: null
   };
+  if(!first_name || !last_name || !email || !gender || password === null)
+  {
+    return res.sendStatus(400);
+  }
   studentData.password = await bcrypt.hash(password, saltRounds);
   try{
     await Student.create(studentData);
-    const findStudent = await Student.findOne({ where:{ student_id: student_id } });
+    const findStudent = await Student.findOne({ where:{ email: email } });
     if(!findStudent) {
       return res.sendStatus(401);
     }
