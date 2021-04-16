@@ -2,11 +2,11 @@ const express = require("express");
 const { Student } = require("../db/Models/index.js");
 const router = express.Router();
 const bcrypt = require("bcrypt");
-const saltRounds = 10;
 const { v4 } = require("uuid");
 
 router.post("/", async(req, res) =>{
   const student_id = v4();
+  const saltRounds = 10;
   let { first_name, last_name, email, gender, bio, password } = req.body;
   let studentData = {
     student_id: student_id,
