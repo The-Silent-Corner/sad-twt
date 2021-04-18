@@ -5,17 +5,16 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
 router.post("/", async(req, res) =>{
-  const { username, password } = req.body;
+  const { email, password } = req.body;
   try{
-    const findStudent = await Student.findAll({ where:{ email:username } });
-    if(findStudent.length !== 1)
-    {
-      return res.sendStatus(401);
+    const findStudent = await Student.findOne({ where:{ email: email } });
+    if(!findStudent) {
+      return res.sendStatus(403);
     }
-    bcrypt.compare(password, findStudent[0].password, async(err, result) => {
-      if(result == true)
+    bcrypt.compare(password, findStudent.password, async(err, result) => {
+      if(result)
       {
-        const token = jwt.sign({ user:findStudent[0].student_id }, process.env.SECRET, {
+        const token = jwt.sign({ user:findStudent.student_id }, process.env.SECRET, {
           expiresIn: "1h"
         });
         res.cookie("user", token, {
@@ -23,10 +22,9 @@ router.post("/", async(req, res) =>{
           signed: true,
           maxAge: 1e3 * 3600 //expires in one hour
         });
-        res.status(200);
         return res.redirect("/");
       }
-      if(result == false)
+      else
       {
         return res.sendStatus(401);
       }
