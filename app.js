@@ -16,6 +16,7 @@ app.set("view engine", "ejs");
 app.use("/register/student", require("./routes/studentRegister"));
 app.use("/register/tutor", require("./routes/tutorRegister"));
 app.use("/register/parent", require("./routes/parentRegister"));
+app.use("/login/student", require("./routes/studentLogin"));
 
 /**
  * Define your routes below, or pass them around to an Express router.
