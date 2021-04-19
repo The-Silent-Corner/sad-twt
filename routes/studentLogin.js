@@ -19,6 +19,7 @@ router.post("/", async(req, res) =>{
         });
         res.cookie("user", token, {
           httpOnly: true,
+          secure: process.env.NODE_ENV === "production" ? true : false,
           signed: true,
           maxAge: 1e3 * 3600 //expires in one hour
         });

@@ -4,7 +4,6 @@ const { createTables, wipeDBTables } = require("../db/databaseHelpers.js");
 const { Student } = require("../db/Models/index.js");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const cookieParser = require("cookie-parser");
 const cookie = require("cookie");
 
 let hashedPassword;
@@ -54,6 +53,17 @@ describe("POST /login/student", () =>{
   it("should have a user cookie", async() => {
     const c1 = res["headers"]["set-cookie"][0];
     const pcookie = cookie.parse(c1);
-    console.log(pcookie.user);
+    const findColon = pcookie.user.indexOf(":");
+    const firstP = pcookie.user.indexOf(".", findColon);
+    const secondP = pcookie.user.indexOf(".", firstP + 1);
+    const thirdP = pcookie.user.indexOf(".", secondP + 1);
+    const token = pcookie.user.substring(findColon + 1, thirdP);
+    try {  
+      const decoded = jwt.verify(token, process.env.SECRET);
+      expect(decoded.user).toEqual("very_fancy_id");
+    }catch(error)
+    {
+      console.log(error);
+    }
   });
 });
