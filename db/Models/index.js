@@ -40,11 +40,11 @@ const Parent = db.define("Parent", {
   },
   first_name: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: true
   },
   last_name: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: true
   },
   email: {
     type: DataTypes.STRING,
