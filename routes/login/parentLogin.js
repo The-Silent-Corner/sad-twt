@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { Parent } = require("../db/Models/index.js");
+const { Parent } = require("../../db/Models/index.js");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 

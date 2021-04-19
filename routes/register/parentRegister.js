@@ -1,5 +1,5 @@
 const express = require("express");
-const { Parent } = require("../db/Models/index.js");
+const { Parent } = require("../../db/Models");
 const router = express.Router();
 const bcrypt = require("bcrypt");
 const saltRounds = 10;

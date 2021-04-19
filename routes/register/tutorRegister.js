@@ -1,5 +1,5 @@
 const express = require("express");
-const { Tutor } = require("../db/Models/index.js");
+const { Tutor } = require("../../db/Models");
 const router = express.Router();
 const bcrypt = require("bcrypt");
 const { v4 } = require("uuid");
