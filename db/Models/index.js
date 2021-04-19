@@ -63,11 +63,11 @@ const Tutor = db.define("Tutor", {
   },
   first_name:{
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: true
   },
   last_name:{
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: true
   },
   email:{
     type: DataTypes.STRING,
@@ -75,7 +75,7 @@ const Tutor = db.define("Tutor", {
   },
   gender:{
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: true
   },
   password:{
     type: DataTypes.STRING,
