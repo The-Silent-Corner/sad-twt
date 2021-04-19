@@ -4,23 +4,23 @@ const { Parent } = require("../db/Models/index.js");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
-router.post("/", async(req,res) =>{
-  const {email, password} = req.body;
+router.post("/", async(req, res) =>{
+  const { email, password } = req.body;
   try{
-    const findParent = await Parent.findOne({where:{email: email}});
+    const findParent = await Parent.findOne({ where:{ email: email } });
     if(!findParent)
     {
       return res.sendStatus(403);
     }
-    bcrypt.compare(password, findParent.password, async(err,result) =>{
+    bcrypt.compare(password, findParent.password, async(err, result) =>{
       if(result)
       {
-        const token = jwt.sign({user: findParent.parent_id, type: "parent"}, process.env.SECRET,{
+        const token = jwt.sign({ user: findParent.parent_id, type: "parent" }, process.env.SECRET, {
           expiresIn: "1h"
         });
-        res.cookie("user", token,{
+        res.cookie("user", token, {
           httpOnly: true, 
-          secure: process.env.NODE_ENV  === "production" ? true: false,
+          secure: process.env.NODE_ENV === "production" ? true : false,
           signed: true,
           maxAge: 1e3 * 3600
         });
@@ -30,7 +30,7 @@ router.post("/", async(req,res) =>{
       {
         return res.sendStatus(401);
       }
-    })
+    });
   }catch(error)
   {
     console.log(error);
