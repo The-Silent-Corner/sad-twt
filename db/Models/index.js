@@ -8,11 +8,11 @@ const Student = db.define("Student", {
   },
   first_name: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: true
   },
   last_name: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: true
   },
   email: {
     type: DataTypes.STRING,
@@ -20,7 +20,7 @@ const Student = db.define("Student", {
   },
   gender: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: true
   },
   bio: {
     type: DataTypes.STRING,
