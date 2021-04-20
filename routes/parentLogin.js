@@ -10,7 +10,7 @@ router.post("/", async(req, res) =>{
     const findParent = await Parent.findOne({ where:{ email: email } });
     if(!findParent)
     {
-      return res.sendStatus(403);
+      return res.sendStatus(401);
     }
     bcrypt.compare(password, findParent.password, async(err, result) =>{
       if(result)
