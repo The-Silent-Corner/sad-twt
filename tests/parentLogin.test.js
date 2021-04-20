@@ -12,11 +12,11 @@ beforeAll(async() =>{
   await createTables();
   const pw = "thisismypassword";
   try{
-    hashedPassword = await bcrypt.hash(pw,10);
+    hashedPassword = await bcrypt.hash(pw, 10);
   }catch(error)
   {
     console.log("Errors while hasing password for parent login test");
-    console.error(err);
+    console.error(error);
   }
   await Parent.create({
     parent_id: "123",
@@ -29,7 +29,7 @@ beforeAll(async() =>{
 afterAll(async() =>{
   await wipeDBTables();
 });
-describe("/POST /login/parent" ,() =>{
+describe("/POST /login/parent", () =>{
   let res; 
   beforeAll(async() =>{
     res = await request(app)
@@ -41,7 +41,7 @@ describe("/POST /login/parent" ,() =>{
       .set("Accept", "application/json");
   });
   it("should have a model in the db", async() =>{
-    const findParent = await Parent.findAll({where:{email:"JP@gmail.com"}});
+    const findParent = await Parent.findAll({ where:{ email:"JP@gmail.com" } });
     expect(findParent).toBeDefined();
     expect(findParent).not.toBeNull();
   });

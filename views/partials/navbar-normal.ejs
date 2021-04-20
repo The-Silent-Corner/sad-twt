@@ -2,9 +2,14 @@
     <nav class="navbar-start">
         <div class="navbar-brand">
             <a href="/" class="navbar-item title">TRUSTWORTHY TUTORS</a>
+            <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" id="navbar-burger">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
         </div>
     </nav>
-    <nav class="navbar-end">
+    <nav class="navbar-end" id="navbar">
         <a href="/" class="navbar-item">Home</a>
         <a href="#about" class="navbar-item">About Us</a>
         <a href="#mission" class="navbar-item">Our Mission</a>
@@ -12,3 +17,26 @@
         <a href="/login" class="navbar-item">Login</a>
     </nav>
 </nav>
+
+<script>
+  function windowSizer() {
+    const ww = window.innerWidth
+    if(ww <= 1024) {
+      $("#navbar").addClass("navbar-menu")
+    } else {
+      $("#navbar").removeClass("navbar-menu")
+    }
+  }
+  $(document).on('ready', windowSizer());
+  $(window).on('resize', function(){
+    windowSizer();
+  });
+  $("#navbar-burger").on('click', () => {
+    console.log("Hello")
+    if($("#navbar").hasClass("navbar-menu")) {
+      $("#navbar").removeClass("navbar-menu");
+    } else {
+      $("#navbar").addClass("navbar-menu");
+    }
+  })
+</script>

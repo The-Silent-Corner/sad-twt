@@ -13,7 +13,7 @@
 
 <section class="section column">
     <div class="title container has-text-centered">Register</div>
-    <form action="/register" method="post">
+    <form id="register-form" method="post">
         <div class="container column is-half">
             <label for="email" class="label">
                 Email
@@ -27,6 +27,20 @@
                 Confirm password
                 <input id="register-password2" type="password" class="input" required name="password2">
             </label>
+            <div class="control column container has-text-centered" id="radio-register">
+                <label class="radio">
+                    <input type="radio" name="type" value="student" required class="radio-register-check">
+                    Student
+                </label>
+                <label class="radio">
+                    <input type="radio" name="type" value="tutor" required class="radio-register-check">
+                    Tutor
+                </label>
+                <label class="radio">
+                    <input type="radio" name="type" value="parent" required class="radio-register-check">
+                    Parent
+                </label>
+            </div>
             <div class="container column has-text-centered">
                 <div id="register-button-notification" class="notification is-danger is-light" hidden>
                     Passwords do not match
@@ -39,42 +53,7 @@
 
 <%- include("partials/footer") %>
 
+<script src="javascript/register.js"></script>
+
 </body>
 </html>
-
-<script>
-  let pw2ChangedYet = false;
-  function setClasses() {
-
-  }
-
-  function checkPasswordEquality() {
-    const p1 = $("#register-password1").val()
-    const p2 = $("#register-password2").val()
-
-    if(!pw2ChangedYet) {
-      return;
-    }
-
-    if(p1 !== p2) {
-      $("#register-password1").addClass("is-danger");
-      $("#register-password2").addClass("is-danger");
-      $("#register-button-notification").show();
-      $("#register-button").attr("disabled", true)
-    } else {
-      $("#register-password1").removeClass("is-danger");
-      $("#register-password2").removeClass("is-danger");
-      $("#register-button-notification").hide();
-      $("#register-button").attr("disabled", false)
-    }
-  }
-
-  $("#register-password1").on("keyup", () => {
-    checkPasswordEquality();
-  })
-
-  $("#register-password2").on("keyup", () => {
-    pw2ChangedYet = true
-    checkPasswordEquality();
-  })
-</script>

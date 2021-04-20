@@ -13,17 +13,15 @@ describe("POST /register/tutor", () =>{
   it("it should register the tutor", async() =>{
     const res = await request(app)
       .post("/register/tutor")
+      .set("Accept", "application/json")
       .send({
-        first_name: "Bill",
-        last_name: "Bob",
         email: "Billy@",
-        gender: "M",
-        password: "akljf89023",
-        bio: "Hello, my name is Bill Bob" })
-      .set("Accept", "application/json");
+        password1: "akljf89023",
+        password2: "akljf89023"
+      });
     expect(res.status).toBe(200);
   });
-  test("if input data exist in database", async() =>{
+  test("email exists in the tutor db", async() =>{
     const findTutor = await Tutor.findOne({ where:{ email:"Billy@" } });
     expect(findTutor).toBeDefined();
     expect(findTutor).not.toBeNull();

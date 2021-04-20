@@ -10,9 +10,9 @@ let hashedPassword;
 
 beforeAll(async() => {
   await createTables();
-  const pw = "jello"
+  const pw = "jello";
   try{
-    hashedPassword = await bcrypt.hash(pw,10);
+    hashedPassword = await bcrypt.hash(pw, 10);
   }catch(err)
   {
     console.log("Erros while hashing password for tutor login test");
@@ -24,7 +24,7 @@ beforeAll(async() => {
     last_name: "Moua",
     email: "jmoua@",
     gender: "M",
-    password: "Skyrim",
+    password: hashedPassword,
     bio: "I love to code"
   });
 });
@@ -38,18 +38,16 @@ describe("POST /login/tutor", () =>{
       .post("/login/tutor")
       .send({
         email: "jmoua@",
-        password: "Skyrim"
+        password: "jello"
       })
       .set("Accept", "application/json");
   });
   it("should have a model in the db", async() => {
-    const findTutor = Tutor.findOne({where:{email:"jmous@"}});
+    const findTutor = Tutor.findOne({ where:{ email:"jmous@" } });
     expect(findTutor).toBeDefined();
     expect(findTutor).not.toBeNull();
   });
   it("should have a user cookie", async() => {
-    console.log(res["headers"])
-    console.log(c1);
     const c1 = res["headers"]["set-cookie"][0];
     const pcookie = cookie.parse(c1);
     const findColon = pcookie.user.indexOf(":");
@@ -57,12 +55,12 @@ describe("POST /login/tutor", () =>{
     const secondP = pcookie.user.indexOf(".", firstP + 1);
     const thirdP = pcookie.user.indexOf(".", secondP + 1);
     const token = pcookie.user.substring(findColon + 1, thirdP);
-    try {  
+    try {
       const decoded = jwt.verify(token, process.env.SECRET);
-      expect(decoded.user).toEqual("very_fancy_id");
+      expect(decoded.user).toEqual("1234");
     }catch(error)
     {
-      console.log(error);
+      console.error(error);
     }
   });
-})
+});
