@@ -7,21 +7,23 @@ const { v4 } = require("uuid");
 router.post("/", async(req, res) =>{
   const student_id = v4();
   const saltRounds = 10;
-  let { first_name, last_name, email, gender, bio, password } = req.body;
-  let studentData = {
-    student_id: student_id,
-    first_name: first_name,
-    last_name: last_name,
-    email: email,
-    gender: gender,
-    bio: bio,
-    password: null
-  };
-  if(!first_name || !last_name || !email || !gender || password === null)
-  {
+  let { email, password1, password2 } = req.body;
+  if(!email || !password1 || !password2) {
     return res.sendStatus(400);
   }
-  studentData.password = await bcrypt.hash(password, saltRounds);
+  const studentData = {
+    student_id: student_id,
+    email: email,
+    password: null
+  };
+  if(password1 !== password2) {
+    return res.sendStatus(400);
+  }
+  try {
+    studentData.password = await bcrypt.hash(password1, saltRounds);
+  } catch(err) {
+    return res.status(500).json({ message: "bcrypt hash failed" });
+  }
   try{
     await Student.create(studentData);
     const findStudent = await Student.findOne({ where:{ email: email } });

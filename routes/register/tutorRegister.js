@@ -7,32 +7,25 @@ const { v4 } = require("uuid");
 router.post("/", async(req, res) =>{
   const tutor_id = v4();
   const saltRounds = 10;
-  let { first_name, last_name, email, gender, password, bio } = req.body;
-  const tutorData = {
-    tutor_id: tutor_id,
-    first_name: first_name,
-    last_name: last_name,
-    email: email, 
-    gender: gender,
-    password: null,
-    bio: bio
-  };
-  if(!first_name || !last_name || !email || !gender || !bio || password === null)
+  let { email, password1, password2 } = req.body;
+  if(!email || !password1 || !password2)
   {
     return res.sendStatus(400);
   }
-  tutorData.password = await bcrypt.hash(password, saltRounds);
+  if(password1 !== password2) {
+    return res.sendStatus(400);
+  }
+  const tutorData = {
+    tutor_id: tutor_id,
+    email: email,
+    password: null
+  };
+  tutorData.password = await bcrypt.hash(password1, saltRounds);
   try{
     await Tutor.create(tutorData);
-    const findTutor = await Tutor.findOne({ where:{ email:email } });
-    if(!findTutor)
-    {
-      return res.sendStatus(401);
-    }
-  }catch(err)
-  {
+  } catch(err) {
     console.log(err);
-    return res.sendStatus(500);
+    return res.status(500).json({ message: "unable to create user" });
   }
   res.end();
 });

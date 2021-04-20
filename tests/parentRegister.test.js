@@ -12,12 +12,12 @@ describe("POST /register/parent", () => {
   it("should register the parent", async() => {
     const res = await request(app)
       .post("/register/parent")
+      .set("Accept", "application/json")
       .send({
-        first_name: "Tom",
-        last_name: "Timmy",
         email: "TT@gmail.com",
-        password: "password" })
-      .set("Accept", "application/json");
+        password1: "password",
+        password2: "password"
+      });
     expect(res.status).toBe(200);
   });
   test("if input data exist in database", async() =>{
