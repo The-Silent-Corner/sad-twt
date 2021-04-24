@@ -11,6 +11,9 @@ router.post("/", async(req, res) =>{
   if(!email || !password1 || !password2) {
     return res.sendStatus(400);
   }
+  if((await Student.findOne({ where: { email: email } }))) {
+    return res.sendStatus(409);
+  }
   const studentData = {
     student_id: student_id,
     email: email,
@@ -34,6 +37,6 @@ router.post("/", async(req, res) =>{
     console.error(err);
     return res.sendStatus(500);
   }
-  res.end();
+  res.render("partials/register_success");
 });
 module.exports = router;

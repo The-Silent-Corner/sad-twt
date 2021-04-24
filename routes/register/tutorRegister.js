@@ -15,6 +15,9 @@ router.post("/", async(req, res) =>{
   if(password1 !== password2) {
     return res.sendStatus(400);
   }
+  if((await Tutor.findOne({ where: { email: email } }))) {
+    return res.sendStatus(409);
+  }
   const tutorData = {
     tutor_id: tutor_id,
     email: email,
@@ -27,6 +30,6 @@ router.post("/", async(req, res) =>{
     console.log(err);
     return res.status(500).json({ message: "unable to create user" });
   }
-  res.end();
+  return res.render("partials/register_success");
 });
 module.exports = router;
