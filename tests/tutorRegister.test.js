@@ -26,4 +26,53 @@ describe("POST /register/tutor", () =>{
     expect(findTutor).toBeDefined();
     expect(findTutor).not.toBeNull();
   });
+  describe("When email is not provided", () =>{
+    it("should return 400", async() =>{
+      const res = await request(app)
+        .post("/register/tutor")
+        .send({
+          password1: "password",
+          password2: "password"
+        })
+        .set("Accept", "application/json");
+      expect(res.status).toBe(400);
+    });
+  });
+  describe("When the first password is not provided", () =>{
+    it("should return 400", async() =>{
+      const res = await request(app)
+        .post("/register/tutor")
+        .send({
+          email: "Billy@",
+          password2: "akljf89023"
+        })
+        .set("Accept", "application/json");
+      expect(res.status).toBe(400);
+    });
+  });
+  describe("When the second password is not provided", () =>{
+    it("should return 400", async() =>{
+      const res = await request(app)
+        .post("/register/tutor")
+        .send({
+          email: "Billy@",
+          password1: "akljf98023"
+        })
+        .set("Accept", "application/json");
+      expect(res.status).toBe(400);
+    });
+  });
+  describe("When the passwords do not match", () =>{
+    it("should return 400", async() =>{
+      const res = await request(app)
+        .post("/register/tutor")
+        .send({
+          email: "Billy@",
+          password1: "akljf98023",
+          password2: "wrongPassword"
+        })
+        .set("Accept", "application/json");
+      expect(res.status).toBe(400);
+    });
+  });
 });
