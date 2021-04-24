@@ -24,6 +24,7 @@ router.post("/", async(req, res) =>{
           signed: true,
           maxAge: 1e3 * 3600
         });
+        
         return res.redirect("/");
       }
       else

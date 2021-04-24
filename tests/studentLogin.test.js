@@ -15,7 +15,6 @@ beforeAll(async() => {
     hashedPassword = await bcrypt.hash(pw, 10);
   } catch(err) {
     console.log("Errors while hashing password for student login test:");
-    console.err(err);
   }
   await Student.create({
     student_id: "very_fancy_id",
