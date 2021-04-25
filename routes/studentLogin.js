@@ -9,7 +9,7 @@ router.post("/", async(req, res) =>{
   try{
     const findStudent = await Student.findOne({ where:{ email: email } });
     if(!findStudent) {
-      return res.sendStatus(401);
+      return res.sendStatus(403);
     }
     bcrypt.compare(password, findStudent.password, async(err, result) => {
       if(result)

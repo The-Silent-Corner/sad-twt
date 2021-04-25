@@ -1,28 +1,27 @@
 const express = require("express");
 const router = express.Router();
-const { Parent } = require("../db/Models/index.js");
+const { Student } = require("../../db/Models/index.js");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
 router.post("/", async(req, res) =>{
   const { email, password } = req.body;
   try{
-    const findParent = await Parent.findOne({ where:{ email: email } });
-    if(!findParent)
-    {
-      return res.sendStatus(403);
+    const findStudent = await Student.findOne({ where:{ email: email } });
+    if(!findStudent) {
+      return res.sendStatus(401);
     }
-    bcrypt.compare(password, findParent.password, async(err, result) =>{
+    bcrypt.compare(password, findStudent.password, async(err, result) => {
       if(result)
       {
-        const token = jwt.sign({ user: findParent.parent_id, type: "parent" }, process.env.SECRET, {
+        const token = jwt.sign({ user:findStudent.student_id, type: "student" }, process.env.SECRET, {
           expiresIn: "1h"
         });
         res.cookie("user", token, {
-          httpOnly: true, 
+          httpOnly: true,
           secure: process.env.NODE_ENV === "production" ? true : false,
           signed: true,
-          maxAge: 1e3 * 3600
+          maxAge: 1e3 * 3600 //expires in one hour
         });
         return res.redirect("/");
       }
@@ -31,10 +30,9 @@ router.post("/", async(req, res) =>{
         return res.sendStatus(401);
       }
     });
-  }catch(error)
-  {
-    console.log(error);
-    return res.sendStatus(500);
+  }catch(err) {
+    console.log(err);
+    res.sendStatus(500);
   }
 });
 module.exports = router;

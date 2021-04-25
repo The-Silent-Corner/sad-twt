@@ -1,5 +1,5 @@
 const express = require("express");
-const { Student } = require("../db/Models/index.js");
+const { Student } = require("../../db/Models");
 const router = express.Router();
 const bcrypt = require("bcrypt");
 const { v4 } = require("uuid");
@@ -10,6 +10,9 @@ router.post("/", async(req, res) =>{
   let { email, password1, password2 } = req.body;
   if(!email || !password1 || !password2) {
     return res.sendStatus(400);
+  }
+  if((await Student.findOne({ where: { email: email } }))) {
+    return res.sendStatus(409);
   }
   const studentData = {
     student_id: student_id,
@@ -34,6 +37,6 @@ router.post("/", async(req, res) =>{
     console.error(err);
     return res.sendStatus(500);
   }
-  res.end();
+  res.render("partials/register_success");
 });
 module.exports = router;
