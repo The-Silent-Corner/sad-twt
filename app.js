@@ -4,7 +4,6 @@ const cors = require("cors");
 const app = express();
 const path = require("path");
 const cookieParser = require("cookie-parser");
-
 /**
  * Middleware Setup
  */
