@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const { Tutor } = require("../db/Models/index");
-const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const jwtGenerate = require("../helpers/jwtGenerate");
 

@@ -1,9 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const { Parent } = require("../db/Models/index.js");
-const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-const jwtGenerate = require("../helpers/jwtGenerate")
+const jwtGenerate = require("../helpers/jwtGenerate");
 
 router.post("/", async(req, res) =>{
   const { email, password } = req.body;

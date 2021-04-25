@@ -1,11 +1,5 @@
-const request = require("supertest");
-const app = require("../app.js");
-const jwt = require("jsonwebtoken");
-const cookie = require("cookie");
 const jwtVerify = require("../helpers/jwtVerify.js");
-const bcrypt = require("bcrypt");
 const jwtGenerate = require("../helpers/jwtGenerate");
-
 
 describe("decoding json web token", () =>{
   it("should return payload", async() =>{
@@ -17,8 +11,8 @@ describe("decoding json web token", () =>{
     expect(verify.type).toBe("parent");
   });
   it("should return false", async() =>{
-    const testToken = "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoiMTIzIiwidHlwZSI6InBhcmVudCIsImlhdCI6MTYxOTMwOTM0MywiZXhwIjoxNjE5MzEyOTQzfQ.W97zYdo9Viks10hteOySDOpcfPRWXxyOzbazaC7-lYo"
+    const testToken = "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoiMTIzIiwidHlwZSI6InBhcmVudCIsImlhdCI6MTYxOTMwOTM0MywiZXhwIjoxNjE5MzEyOTQzfQ.W97zYdo9Viks10hteOySDOpcfPRWXxyOzbazaC7-lYo";
     const verify = await jwtVerify(testToken);
     expect(verify).toBe(false);
-  })
+  });
 });
