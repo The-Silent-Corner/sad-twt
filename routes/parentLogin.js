@@ -10,6 +10,7 @@ router.post("/", async(req, res) =>{
     const findParent = await Parent.findOne({ where:{ email: email } });
     if(!findParent)
     {
+
       return res.sendStatus(401);
     }
     bcrypt.compare(password, findParent.password, async(err, result) =>{
@@ -24,7 +25,6 @@ router.post("/", async(req, res) =>{
           signed: true,
           maxAge: 1e3 * 3600
         });
-        
         return res.redirect("/");
       }
       else
