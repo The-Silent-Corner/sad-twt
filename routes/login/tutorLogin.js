@@ -1,9 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const { Tutor } = require("../db/Models/index");
+const { Tutor } = require("../../db/Models/index");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-const jwtGenerate = require("../helpers/jwtGenerate");
 
 router.post("/", async(req, res) =>{
   const { email, password } = req.body;
@@ -11,12 +10,15 @@ router.post("/", async(req, res) =>{
     const findTutor = await Tutor.findOne({ where:{ email:email } });
     if(!findTutor)
     {
-      return res.sendStatus(403);
+      return res.sendStatus(401);
     }
     bcrypt.compare(password, findTutor.password, async(err, result) =>{
       if(result)
       {
-        res.cookie("user", jwtGenerate(findTutor.tutor_id, "tutor"), {
+        const token = jwt.sign({ user:findTutor.tutor_id, type: "tutor" }, process.env.SECRET, {
+          expiresIn: "1h"
+        });
+        res.cookie("user", token, {
           httpOnly: true,
           secure: process.env.NODE_ENV === "production",
           signed: true, 
@@ -35,5 +37,4 @@ router.post("/", async(req, res) =>{
     return res.sendStatus(500);
   }
 });
-
 module.exports = router;

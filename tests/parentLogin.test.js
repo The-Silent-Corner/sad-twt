@@ -56,7 +56,7 @@ describe("/POST /login/parent", () =>{
     const secondP = pcookie.user.indexOf(".", firstP + 1);
     const thirdP = pcookie.user.indexOf(".", secondP + 1);
     const token = pcookie.user.substring(findColon + 1, thirdP);
-    try {  
+    try {
       const decoded = jwt.verify(token, process.env.SECRET);
       expect(decoded.user).toEqual("123");
     }catch(error)
