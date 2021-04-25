@@ -13,11 +13,11 @@ router.post("/", async(req,res) =>{
     else
     {
       if(valid.type === "student")
-        res.render("/home/student");
+        res.render("home/student");
       if(valid.type === "parent")
-        res.render("/home/parent")
+        res.render("home/parent")
       if(valid.type === "tutor")
-        res.render("/home/tutor");
+        res.render("home/tutor");
     }
   }
   else

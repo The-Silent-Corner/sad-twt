@@ -8,8 +8,7 @@
     "test": "jest",
     "lint": "eslint .",
     "dev": "nodemon .",
-    "migrate": "node ./db/__migrateDb__.js",
-    "type" : "module"
+    "migrate": "node ./db/__migrateDb__.js"
   },
   "repository": {
     "type": "git",

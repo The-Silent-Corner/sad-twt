@@ -1,19 +1,13 @@
 const jwt = require("jsonwebtoken");
 
-module.exports.validLogin = async(req,res) => {
-  if(req.signedCookie.user)
+async function jwtVerify(token) {
+  try
   {
-    try{
-      await jwt.verify(req.signedCookie.user, process.env.SECRET);
-      return true;
-    }catch(err){
-      res.sendStatus(401);
-      return false
-    }
-  }
-  else
+    const decoded = await jwt.verify(token, process.env.SECRET)
+    return decoded;
+  }catch(err)
   {
-    res.sendStatus(401);
-    return false;
+    return false
   }
 };
+module.exports = jwtVerify;
