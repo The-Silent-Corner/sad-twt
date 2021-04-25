@@ -31,29 +31,22 @@ app.get("/login", (req, res) => {
 });
 app.put("/:type", async(req, res, next) => {
   const token = await jwtVerify(req.signedCookies.user);
+  if(token === false && (type !== "student" || type !== "parent" || type !== "tutor"))
+    return res.sendStatus(500);
   if(req.params.type === "student")
   {
-    if(token === false && type !== "student")
-    {
-      return res.sendStatus(500);
-    }
     const type = token.type;
     await updateStudentInfo(token.user, req.body.firstName, req.body.lastName, req.body.bio, req.body.gender);
   }
   else if(req.params.type === "parent")
   {
-    if(token === false && type !== "parent")
-      return res.sendStatus(500);
     const type = token.type;
     await updateParentInfo(token.user, req.body.firstName, req.body.lastName);
   }
   else if(req.params.type === "tutor")
   {
-    if(token === false && type !== "tutor")
-      return res.sendStatus(500);
     const type = token.type;
     await updateTutorInfo(token.user, req.body.firstName, req.body.lastName, req.body.bio, req.body.gender);
-    
   }
   else
   {
