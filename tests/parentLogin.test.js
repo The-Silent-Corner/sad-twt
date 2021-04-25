@@ -64,4 +64,24 @@ describe("/POST /login/parent", () =>{
       console.log(error);
     }
   });
+  test("if there is no parent model in db", async() =>{
+    const res = await request(app)
+      .post("/login/parent")
+      .send({
+        email: "nothing",
+        password: "thisismypassword"
+      })
+      .set("Accept", "application/json");
+    expect(res.status).toBe(401);
+  });
+  test("if password does not match", async() =>{
+    const res = await request(app)
+      .post("/login/parent")
+      .send({
+        email: "JP@gmail.com",
+        password: "wrongPassword"
+      })
+      .set("Accept", "application/json");
+    expect(res.status).toBe(401);
+  });
 });

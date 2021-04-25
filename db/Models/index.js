@@ -8,11 +8,11 @@ const Student = db.define("Student", {
   },
   first_name: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: true
   },
   last_name: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: true
   },
   email: {
     type: DataTypes.STRING,
@@ -20,7 +20,7 @@ const Student = db.define("Student", {
   },
   gender: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: true
   },
   bio: {
     type: DataTypes.STRING,
@@ -40,11 +40,11 @@ const Parent = db.define("Parent", {
   },
   first_name: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: true
   },
   last_name: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: true
   },
   email: {
     type: DataTypes.STRING,
@@ -63,11 +63,11 @@ const Tutor = db.define("Tutor", {
   },
   first_name:{
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: true
   },
   last_name:{
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: true
   },
   email:{
     type: DataTypes.STRING,
@@ -75,7 +75,7 @@ const Tutor = db.define("Tutor", {
   },
   gender:{
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: true
   },
   password:{
     type: DataTypes.STRING,

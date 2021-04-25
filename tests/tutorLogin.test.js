@@ -63,4 +63,24 @@ describe("POST /login/tutor", () =>{
       console.error(error);
     }
   });
+  test("if there is no tutor model in db", async() =>{
+    const res = await request(app)
+      .post("/login/tutor")
+      .send({
+        email: "nothing",
+        password: "nothing"
+      })
+      .set("Accept", "application/json");
+    expect(res.status).toBe(401);
+  });
+  test("if password does not match", async() =>{
+    const res = await request(app)
+      .post("/login/tutor")
+      .send({
+        email:"jmoua@",
+        password: "wrongPassword"
+      })
+      .set("Accept", "application/json");
+    expect(res.status).toBe(401);
+  });
 });
