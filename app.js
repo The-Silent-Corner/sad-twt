@@ -5,7 +5,7 @@ const app = express();
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const jwtVerify = require("./helpers/jwtVerify");
-const { updateStudentInfo } = require("./helpers/updateUserInfo");
+const { updateStudentInfo, updateParentInfo, updateTutorInfo } = require("./helpers/updateUserInfo");
 /**
  * Middleware Setup
  */
@@ -38,15 +38,24 @@ app.put("/:type", async(req, res, next) => {
     {
       return res.sendStatus(401);
     }
-    await updateStudentInfo(token.user, req.body.firstName, req.body.lastName, req.body.bio);
+    await updateStudentInfo(token.user, req.body.firstName, req.body.lastName, req.body.bio, req.body.gender);
   }
-  else if(type === "parent")
+  else if(req.params.type === "parent")
   {
-
+    const token = await jwtVerify(req.signedCookies.user);
+    const type = token.type;
+    if(token === false && type !== "parent")
+      return res.sendStatus(401);
+    await updateParentInfo(token.user, req.body.firstName, req.body.lastName);
   }
-  else if(type === "tutor")
+  else if(req.params.type === "tutor")
   {
-
+    const token = await jwtVerify(req.signedCookies.user);
+    const type = token.type;
+    if(token === false && type !== "tutor")
+      return res.sendStatus(401);
+    await updateTutorInfo(token.user, req.body.firstName, req.body.lastName, req.body.bio, req.body.gender);
+    
   }
   else
   {
