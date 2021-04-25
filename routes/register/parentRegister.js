@@ -1,5 +1,5 @@
 const express = require("express");
-const { Parent } = require("../db/Models/index.js");
+const { Parent } = require("../../db/Models");
 const router = express.Router();
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
@@ -15,6 +15,9 @@ router.post("/", async(req, res) => {
   if(password1 !== password2) {
     return res.sendStatus(400);
   }
+  if((await Parent.findOne({ where: { email: email } }))) {
+    return res.sendStatus(409);
+  }
   const parentData = {
     parent_id: parent_id,
     email: email,
@@ -27,6 +30,6 @@ router.post("/", async(req, res) => {
     console.log(err);
     return res.status(500).json({ message: "unable to create parent user" });
   }
-  res.end();
+  res.render("partials/register_success");
 });
 module.exports = router;

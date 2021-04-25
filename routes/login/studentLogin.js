@@ -1,20 +1,23 @@
 const express = require("express");
 const router = express.Router();
-const { Student } = require("../db/Models/index.js");
+const { Student } = require("../../db/Models/index.js");
+const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-const jwtGenerate = require("../helpers/jwtGenerate");
 
 router.post("/", async(req, res) =>{
   const { email, password } = req.body;
   try{
     const findStudent = await Student.findOne({ where:{ email: email } });
     if(!findStudent) {
-      return res.sendStatus(403);
+      return res.sendStatus(401);
     }
     bcrypt.compare(password, findStudent.password, async(err, result) => {
       if(result)
       {
-        res.cookie("user", jwtGenerate(findStudent.student_id, "student"), {
+        const token = jwt.sign({ user:findStudent.student_id, type: "student" }, process.env.SECRET, {
+          expiresIn: "1h"
+        });
+        res.cookie("user", token, {
           httpOnly: true,
           secure: process.env.NODE_ENV === "production" ? true : false,
           signed: true,

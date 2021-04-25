@@ -4,7 +4,6 @@ const cors = require("cors");
 const app = express();
 const path = require("path");
 const cookieParser = require("cookie-parser");
-
 /**
  * Middleware Setup
  */
@@ -14,15 +13,11 @@ app.use(cors()); // TODO: configure me if needs be
 app.use(cookieParser(process.env.SECRET));
 app.use(express.static(path.join(__dirname, "public")));
 app.set("view engine", "ejs");
-app.use("/register/student", require("./routes/studentRegister"));
-app.use("/register/tutor", require("./routes/tutorRegister"));
-app.use("/register/parent", require("./routes/parentRegister"));
-app.use("/login/student", require("./routes/studentLogin"));
-app.use("/login/parent", require("./routes/parentLogin"));
-app.use("/login/tutor", require("./routes/tutorLogin"));
 /**
  * Define your routes below, or pass them around to an Express router.
  */
+app.use("/register", require("./routes/register"));
+app.use("/login", require("./routes/login"));
 app.get("/", (req, res) => {
   res.render("index");
 });

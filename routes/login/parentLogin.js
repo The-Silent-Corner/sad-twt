@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const { Parent } = require("../db/Models/index.js");
+const { Parent } = require("../../db/Models/index.js");
+const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-const jwtGenerate = require("../helpers/jwtGenerate");
 
 router.post("/", async(req, res) =>{
   const { email, password } = req.body;
@@ -10,12 +10,15 @@ router.post("/", async(req, res) =>{
     const findParent = await Parent.findOne({ where:{ email: email } });
     if(!findParent)
     {
-      return res.sendStatus(403);
+      return res.sendStatus(401);
     }
     bcrypt.compare(password, findParent.password, async(err, result) =>{
       if(result)
       {
-        res.cookie("user", jwtGenerate(findParent.parent_id, "parent"), {
+        const token = jwt.sign({ user: findParent.parent_id, type: "parent" }, process.env.SECRET, {
+          expiresIn: "1h"
+        });
+        res.cookie("user", token, {
           httpOnly: true, 
           secure: process.env.NODE_ENV === "production" ? true : false,
           signed: true,
