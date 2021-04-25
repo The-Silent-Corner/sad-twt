@@ -27,5 +27,23 @@ app.get("/register", (req, res) => {
 app.get("/login", (req, res) => {
   res.render("login");
 });
+app.put("/:type", (req,res,next) => {
+  if(type === "student")
+  {
+
+  }
+  else if(type === "parent")
+  {
+
+  }
+  else if(type === "tutor")
+  {
+
+  }
+  else
+  {
+    next();
+  }
+})
 
 module.exports = app;
