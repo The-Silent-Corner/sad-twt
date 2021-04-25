@@ -30,30 +30,28 @@ app.get("/login", (req, res) => {
   res.render("login");
 });
 app.put("/:type", async(req, res, next) => {
+  const token = await jwtVerify(req.signedCookies.user);
   if(req.params.type === "student")
   {
-    const token = await jwtVerify(req.signedCookies.user);
-    const type = token.type;
     if(token === false && type !== "student")
     {
-      return res.sendStatus(401);
+      return res.sendStatus(500);
     }
+    const type = token.type;
     await updateStudentInfo(token.user, req.body.firstName, req.body.lastName, req.body.bio, req.body.gender);
   }
   else if(req.params.type === "parent")
   {
-    const token = await jwtVerify(req.signedCookies.user);
-    const type = token.type;
     if(token === false && type !== "parent")
-      return res.sendStatus(401);
+      return res.sendStatus(500);
+    const type = token.type;
     await updateParentInfo(token.user, req.body.firstName, req.body.lastName);
   }
   else if(req.params.type === "tutor")
   {
-    const token = await jwtVerify(req.signedCookies.user);
-    const type = token.type;
     if(token === false && type !== "tutor")
-      return res.sendStatus(401);
+      return res.sendStatus(500);
+    const type = token.type;
     await updateTutorInfo(token.user, req.body.firstName, req.body.lastName, req.body.bio, req.body.gender);
     
   }

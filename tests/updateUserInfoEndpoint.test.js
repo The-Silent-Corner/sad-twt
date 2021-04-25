@@ -12,7 +12,7 @@ afterAll(async() =>{
 });
 
 //Student
-describe("PUT/student", () =>{
+describe("PUT /student", () =>{
   beforeAll(async() =>{
     const pw = "1234";
     let hashedPassword;
@@ -60,7 +60,7 @@ describe("PUT/student", () =>{
 });
 
 //Parent
-describe("PUT/parent", () =>{
+describe("PUT /parent", () =>{
   beforeAll(async() =>{
     const pw = "1234";
     let hashedPassword;
@@ -104,7 +104,7 @@ describe("PUT/parent", () =>{
 });
 
 //Tutor
-describe("PUT/tutor", () =>{
+describe("PUT /tutor", () =>{
   beforeAll(async() =>{
     const pw = "1234";
     let hashedPassword;
