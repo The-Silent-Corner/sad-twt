@@ -1,3 +1,4 @@
+require("dotenv").config();
 const jwtVerify = require("../helpers/jwtVerify.js");
 const jwtGenerate = require("../helpers/jwtGenerate");
 
