@@ -4,8 +4,8 @@ const cors = require("cors");
 const app = express();
 const path = require("path");
 const cookieParser = require("cookie-parser");
-const jwtVerify = require("./helpers/jwtVerify");
 const { updateStudentInfo, updateParentInfo, updateTutorInfo } = require("./helpers/updateUserInfo");
+const jwtVerify = require("./helpers/jwtVerify");
 /**
  * Middleware Setup
  */
@@ -20,8 +20,24 @@ app.set("view engine", "ejs");
  */
 app.use("/register", require("./routes/register"));
 app.use("/login", require("./routes/login"));
-app.get("/", (req, res) => {
+app.get("/", async(req, res) => {
+  const { user } = req.signedCookies;
+  const decoded = await jwtVerify(user);
+  if(decoded) {
+    const { type } = decoded;
+    if(type === "student") {
+      return res.render("student/home");
+    } else if(type === "parent") {
+      return res.render("parent/home");
+    } else if(type === "tutor") {
+      return res.render("tutor/home");
+    }
+  }
   res.render("index");
+});
+app.get("/logout", async(req, res) => {
+  res.clearCookie("user");
+  res.redirect("/");
 });
 app.get("/register", (req, res) => {
   res.render("register");
