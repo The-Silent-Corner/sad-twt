@@ -68,5 +68,5 @@ app.put("/:type", async(req, res, next) => {
   }
   return res.sendStatus(200);
 });
-
+app.use("/addCourse", require("./routes/addCourse"));
 module.exports = app;
