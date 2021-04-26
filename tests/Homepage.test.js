@@ -49,11 +49,11 @@ describe("GET /", () => {
       .set("Accept", "application/json")
       .send({ email: "foobar@email.com", password: "password" });
     const parentResponse = await request(app)
-      .post("/login/student")
+      .post("/login/parent")
       .set("Accept", "application/json")
       .send({ email: "foobar@email.com", password: "password" });
     const tutorResponse = await request(app)
-      .post("/login/student")
+      .post("/login/tutor")
       .set("Accept", "application/json")
       .send({ email: "foobar@email.com", password: "password" });
     studentToken = studentResponse["headers"]["set-cookie"][0];
