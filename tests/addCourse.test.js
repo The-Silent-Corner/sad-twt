@@ -82,7 +82,7 @@ describe("adding a course", () =>{
       .post("/addCourse")
       .send({
         course_name: "Algebra",
-        initial_session_price: 12.50,
+        initial_session_price: 12.50
       })
       .set("Accept", "application/json")
       .set("Cookie", [token]);
