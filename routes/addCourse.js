@@ -8,6 +8,8 @@ router.post("/", async(req, res) =>{
 
   const token = req.signedCookies.user;
   const decoded = await jwtVerify(token);
+  if(decoded === false)
+    return res.sendStatus(401)
   let { course_name, initial_session_price, session_hourly_rate } = req.body;
   if(!course_name || !initial_session_price || !session_hourly_rate)
     return res.sendStatus(400);
