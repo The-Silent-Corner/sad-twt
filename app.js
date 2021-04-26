@@ -4,6 +4,8 @@ const cors = require("cors");
 const app = express();
 const path = require("path");
 const cookieParser = require("cookie-parser");
+const jwtVerify = require("./helpers/jwtVerify");
+const { updateStudentInfo, updateParentInfo, updateTutorInfo } = require("./helpers/updateUserInfo");
 /**
  * Middleware Setup
  */
@@ -26,6 +28,29 @@ app.get("/register", (req, res) => {
 });
 app.get("/login", (req, res) => {
   res.render("login");
+});
+app.put("/:type", async(req, res, next) => {
+  const token = await jwtVerify(req.signedCookies.user);
+  if(token === false && (type !== "student" || type !== "parent" || type !== "tutor"))
+    return res.sendStatus(500);
+  const type = token.type;
+  if(req.params.type === "student")
+  {
+    await updateStudentInfo(token.user, req.body.firstName, req.body.lastName, req.body.bio, req.body.gender);
+  }
+  else if(req.params.type === "parent")
+  {
+    await updateParentInfo(token.user, req.body.firstName, req.body.lastName);
+  }
+  else if(req.params.type === "tutor")
+  {
+    await updateTutorInfo(token.user, req.body.firstName, req.body.lastName, req.body.bio, req.body.gender);
+  }
+  else
+  {
+    return next();
+  }
+  return res.sendStatus(200);
 });
 
 module.exports = app;
