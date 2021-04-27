@@ -6,6 +6,8 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const { updateStudentInfo, updateParentInfo, updateTutorInfo } = require("./helpers/updateUserInfo");
 const jwtVerify = require("./helpers/jwtVerify");
+const searchQuery = require("./helpers/searchQuery");
+
 /**
  * Middleware Setup
  */
@@ -69,4 +71,21 @@ app.put("/:type", async(req, res, next) => {
   return res.sendStatus(200);
 });
 app.use("/addCourse", require("./routes/addCourse"));
+
+app.get("/search", async(req, res) =>{
+  const token = await jwtVerify(req.signedCookies.user);
+  const type = token.type;
+  if(!token && (type !== "student" || type !== "tutor"))
+    return res.sendStatus(401);
+  const { q } = req.query;
+  if(q.length < 3)
+    return res.sendStatus(400);
+  const list = await searchQuery(q);
+  if(q)
+  {
+    res.render("courseList", { user: token, list: list });
+  }
+  else
+    res.render("courseSearch", { user: token });
+});
 module.exports = app;

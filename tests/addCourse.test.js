@@ -59,7 +59,6 @@ describe("adding a course", () =>{
     const res2 = await request(app)
       .post("/addCourse")
       .send({
-        course_name: null,
         initial_session_price: 12.50,
         session_hourly_rate: 30.98
       })
@@ -72,7 +71,6 @@ describe("adding a course", () =>{
       .post("/addCourse")
       .send({
         course_name: "Algebra",
-        initial_session_price: null,
         session_hourly_rate: 30.98
       })
       .set("Accept", "application/json")
@@ -84,8 +82,7 @@ describe("adding a course", () =>{
       .post("/addCourse")
       .send({
         course_name: "Algebra",
-        initial_session_price: 12.50,
-        session_hourly_rate: null
+        initial_session_price: 12.50
       })
       .set("Accept", "application/json")
       .set("Cookie", [token]);
