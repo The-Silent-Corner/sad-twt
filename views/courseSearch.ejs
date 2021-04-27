@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <%- include("partials/headings") %>
+    <title>Course Search</title>
+</head>
+<body class="has-navbar-fixed-top">
+
+<% if(user.type === "student") { %>
+    <%- include("student/navbar") %>
+<% }  else { %>
+    <%- include("tutor/navbar") %>
+<% }%>
+
+<div class="section">
+    <div class="container column">
+        <div class="is-half">
+            <form id="courseSearchForm" action="/test" method="get">
+                <div class="">
+                    <div class="columns is-gapless">
+                        <div class="column">
+                            <input name="q" id="searchQuery" placeholder="Search course" class="input" required minlength="3">
+                        </div>
+                        <div class="column is-2">
+                            <button type="submit" class="button is-primary is-fullwidth">Search Course</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<%- include("partials/footer") %>
+
+</body>
+</html>
