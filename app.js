@@ -88,4 +88,5 @@ app.get("/search", async(req, res) =>{
   else
     res.render("courseSearch", { user: token });
 });
+
 module.exports = app;
