@@ -1,7 +1,7 @@
 const request = require("supertest");
-const app = require("../app.js");
-const { createTables, wipeDBTables } = require("../db/databaseHelpers.js");
-const { Parent } = require("../db/Models/index.js");
+const app = require("../../app.js");
+const { createTables, wipeDBTables } = require("../../db/databaseHelpers.js");
+const { Parent } = require("../../db/Models/index.js");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const cookie = require("cookie");

@@ -1,69 +1,55 @@
 const app = require("../app");
-const { Student, Courses, Tutor, Parent } = require("../db/Models");
 const { createTables, wipeDBTables } = require("../db/databaseHelpers");
 const request = require("supertest");
-const bcrypt = require("bcrypt");
 const searchQuery = require("../helpers/searchQuery");
+const createStudent = require("../helpers/student/createStudent");
+const createParent = require("../helpers/parent/createParent");
+const createTutor = require("../helpers/tutor/createTutor");
+const createCourse = require("../helpers/tutor/createCourse");
 
-beforeAll(async() =>{
+let parentToken, studentToken, tutorToken;
+
+beforeAll(async() => {
   await createTables();
-  const pw = "1234";
-  let hashedPassword;
-  try {
-    hashedPassword = await bcrypt.hash(pw, 10);
-  } catch(err) {
-    console.log("Errors while hashing password for student login test:");
-    console.err(err);
-  }
-  await Student.create({
-    student_id: "1",
-    first_name: "JIMBO",
-    last_name: "Will",
-    gender: "M",
-    email: "txiong@",
-    password: hashedPassword
-  });
-  await Tutor.create({
-    tutor_id: "1234",
-    first_name: "Jim",
-    last_name: "Moua",
-    email: "jmoua@",
-    gender: "M",
-    password: "Skyrim",
-    bio: "I love to code"
-  });
-  await Courses.create({
-    courses_id: "3",
-    course_name: "pre Algebra 3",
-    initial_session_price: "100",
-    session_hourly_rate: "12.50",
-    tutor_id: "1234"
-  });
-  await Courses.create({
-    courses_id: "2",
-    course_name: "Algebra 2",
-    initial_session_price: "100",
-    session_hourly_rate: "12.50",
-    tutor_id: "1234"
-  });
-  await Courses.create({
-    courses_id: "1",
-    course_name: "Algebra 1",
-    initial_session_price: "100",
-    session_hourly_rate: "12.50",
-    tutor_id: "1234"
-  });
-  await Courses.create({
-    courses_id: "43",
-    course_name: "History",
-    initial_session_price: "100",
-    session_hourly_rate: "12.50",
-    tutor_id: "1234"
-  });
+  await createStudent("student_id", "student@email.com", "1234");
+  await createTutor("tutor_id", "tutor@email.com", "1234");
+  await createParent("parent_id", "parent@email.com", "1234");
+
+  parentToken = (
+    await request(app)
+      .post("/login/parent")
+      .set("Accept", "application/json")
+      .send({ email: "parent@email.com", password: "1234" })
+  ).headers["set-cookie"][0];
+  studentToken = (
+    await request(app)
+      .post("/login/student")
+      .set("Accept", "application/json")
+      .send({ email: "student@email.com", password: "1234" })
+  ).headers["set-cookie"][0];
+  tutorToken = (
+    await request(app)
+      .post("/login/tutor")
+      .set("Accept", "application/json")
+      .send({ email: "tutor@email.com", password: "1234" })
+  ).headers["set-cookie"][0];
 });
+ 
 afterAll(async() =>{
   await wipeDBTables();
 });
+
+describe("the tokens", () => {
+  test("The tokens are defined and not null", () => {
+    expect(parentToken).toBeDefined();
+    expect(parentToken).not.toBeNull();
+    expect(studentToken).toBeDefined();
+    expect(studentToken).not.toBeNull();
+    expect(tutorToken).toBeDefined();
+    expect(tutorToken).not.toBeNull();
+  });
+});
+ 
 describe("GET /search", () =>{
   describe("no token", () =>{
     it("should return 401", async() =>{
@@ -72,44 +58,29 @@ describe("GET /search", () =>{
       expect(res.status).toBe(401);
     });
   });
+
   describe("token type is parent", () =>{
-    let token;
-    let res;
-    beforeAll(async() =>{
-      await Parent.create({
-        parent_id: "123",
-        first_name: "pfname",
-        last_name: "plname",
-        email: "pemail.com",
-        password: "$2a$10$yx0mdXWcFBOQi/Zkdi.1Bepc0ki5Gef3Y02EG7DTjF5FOJYejLKUi" //password is pw
-      });
-      res = await request(app)
-        .post("/login/parent")
-        .send({
-          email: "pemail.com",
-          password: "pw"
-        })
-        .set("Accept", "application/json");
-      token = res["headers"]["set-cookie"][0];
-    });
-    test("if token is valid", () =>{
-      expect(res.status).toBe(302);
-      expect(token).toBeDefined();
-    });
     it("should return 401", async() =>{
-      res = await request(app)
-        .get("/search");
+      const res = await request(app)
+        .get("/search")
+        .set("Cookie", [parentToken]);
       expect(res.status).toBe(401);
     });
   });
-  describe("testing the search login ", () =>{
-    it("should return 3", async() =>{
+
+  describe("testing the search query", () =>{
+    beforeAll(async() => {
+      await createCourse("tutor_id", "Algebra 2", 100, 12.50);
+      await createCourse("tutor_id", "hello AlgebraI", 100, 12.50);
+      await createCourse("tutor_id", "pre Algebra 3", 100, 12.50);
+    });
+    it("should return 3", async() => {
       const list = await searchQuery("Algebra");
-      expect(list.length).toBe(3);
+      expect(list.length).toEqual(3);
     });
     it("should return false", async() =>{
-      const wrongList = await searchQuery("nothing");
-      expect(wrongList).toEqual([]);
+      const list = await searchQuery("nothing");
+      expect(list).toEqual([]);
     });
   });
 });

@@ -4,9 +4,7 @@ const cors = require("cors");
 const app = express();
 const path = require("path");
 const cookieParser = require("cookie-parser");
-const { updateStudentInfo, updateParentInfo, updateTutorInfo } = require("./helpers/updateUserInfo");
 const jwtVerify = require("./helpers/jwtVerify");
-const searchQuery = require("./helpers/searchQuery");
 
 /**
  * Middleware Setup
@@ -47,46 +45,9 @@ app.get("/register", (req, res) => {
 app.get("/login", (req, res) => {
   res.render("login");
 });
-app.put("/:type", async(req, res, next) => {
-  const token = await jwtVerify(req.signedCookies.user);
-  if(token === false && (type !== "student" || type !== "parent" || type !== "tutor"))
-    return res.sendStatus(500);
-  const type = token.type;
-  if(req.params.type === "student")
-  {
-    await updateStudentInfo(token.user, req.body.firstName, req.body.lastName, req.body.bio, req.body.gender);
-  }
-  else if(req.params.type === "parent")
-  {
-    await updateParentInfo(token.user, req.body.firstName, req.body.lastName);
-  }
-  else if(req.params.type === "tutor")
-  {
-    await updateTutorInfo(token.user, req.body.firstName, req.body.lastName, req.body.bio, req.body.gender);
-  }
-  else
-  {
-    return next();
-  }
-  return res.sendStatus(200);
-});
-app.use("/addCourse", require("./routes/addCourse"));
-
-app.get("/search", async(req, res) =>{
-  const token = await jwtVerify(req.signedCookies.user);
-  const type = token.type;
-  if(!token && (type !== "student" || type !== "tutor"))
-    return res.sendStatus(401);
-  const { q } = req.query;
-  if(q.length < 3)
-    return res.sendStatus(400);
-  const list = await searchQuery(q);
-  if(q)
-  {
-    res.render("courseList", { user: token, list: list });
-  }
-  else
-    res.render("courseSearch", { user: token });
-});
+app.use("/student", require("./routes/student"));
+app.use("/tutor", require("./routes/tutor"));
+app.use("/parent", require("./routes/parent"));
+app.use("/search", require("./routes/search"));
 
 module.exports = app;
