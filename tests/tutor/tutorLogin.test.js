@@ -1,54 +1,33 @@
 const request = require("supertest");
-const app = require("../app.js");
-const { createTables, wipeDBTables } = require("../db/databaseHelpers.js");
-const { Student } = require("../db/Models/index.js");
-const bcrypt = require("bcrypt");
+const app = require("../../app.js");
+const { createTables, wipeDBTables } = require("../../db/databaseHelpers.js");
+const { Tutor } = require("../../db/Models/index.js");
 const jwt = require("jsonwebtoken");
 const cookie = require("cookie");
-
-let hashedPassword;
+const createTutor = require("../../helpers/tutor/createTutor");
 
 beforeAll(async() => {
   await createTables();
-  const pw = "1234";
-  try {
-    hashedPassword = await bcrypt.hash(pw, 10);
-  } catch(err) {
-    console.log("Errors while hashing password for student login test:");
-    console.err(err);
-  }
-  await Student.create({
-    student_id: "very_fancy_id",
-    first_name: "JIMBO",
-    last_name: "Will",
-    gender: "M",
-    email: "txiong@",
-    password: hashedPassword
-  });
+  await createTutor("1234", "tutor@email.com", "jello");
 });
-
-afterAll(async() =>{
+afterAll(async() => {
   await wipeDBTables();
 });
-
-describe("POST /login/student", () =>{
-  let res;
+describe("POST /login/tutor", () =>{
+  let res; 
   beforeAll(async() => {
     res = await request(app)
-      .post("/login/student")
+      .post("/login/tutor")
       .send({
-        email: "txiong@",
-        password: "1234"
+        email: "tutor@email.com",
+        password: "jello"
       })
       .set("Accept", "application/json");
   });
   it("should have a model in the db", async() => {
-    const user = await Student.findOne({ where: { student_id:"very_fancy_id" } });
-    expect(user).toBeDefined();
-    expect(user).not.toBeNull();
-  });
-  it("should allow the student to login", async() =>{
-    expect(res.status).toBe(302);
+    const findTutor = Tutor.findOne({ where:{ email:"jmous@" } });
+    expect(findTutor).toBeDefined();
+    expect(findTutor).not.toBeNull();
   });
   it("should have a user cookie", async() => {
     const c1 = res["headers"]["set-cookie"][0];
@@ -58,17 +37,17 @@ describe("POST /login/student", () =>{
     const secondP = pcookie.user.indexOf(".", firstP + 1);
     const thirdP = pcookie.user.indexOf(".", secondP + 1);
     const token = pcookie.user.substring(findColon + 1, thirdP);
-    try {  
+    try {
       const decoded = jwt.verify(token, process.env.SECRET);
-      expect(decoded.user).toEqual("very_fancy_id");
+      expect(decoded.user).toEqual("1234");
     }catch(error)
     {
-      console.log(error);
+      console.error(error);
     }
   });
-  test("if there is no student model in db", async() =>{
+  test("if there is no tutor model in db", async() =>{
     const res = await request(app)
-      .post("/login/student")
+      .post("/login/tutor")
       .send({
         email: "nothing",
         password: "nothing"
@@ -78,9 +57,9 @@ describe("POST /login/student", () =>{
   });
   test("if password does not match", async() =>{
     const res = await request(app)
-      .post("/login/student")
+      .post("/login/tutor")
       .send({
-        email: "txiong@",
+        email:"jmoua@",
         password: "wrongPassword"
       })
       .set("Accept", "application/json");

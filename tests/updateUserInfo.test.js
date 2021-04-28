@@ -1,7 +1,9 @@
 require("dotenv").config();
 const { createTables, wipeDBTables } = require("../db/databaseHelpers");
 const { Student, Tutor, Parent } = require("../db/Models");
-const { updateStudentInfo, updateParentInfo, updateTutorInfo } = require("../helpers/updateUserInfo");
+const updateTutorInfo = require("../helpers/tutor/updateTutorInfo");
+const updateStudentInfo = require("../helpers/student/updateStudentInfo");
+const updateParentInfo = require("../helpers/parent/updateParentInfo");
 
 beforeAll(async() =>{
   await createTables();

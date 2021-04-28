@@ -1,32 +1,17 @@
 const request = require("supertest");
-const app = require("../app.js");
-const { createTables, wipeDBTables } = require("../db/databaseHelpers.js");
-const { Courses, Tutor } = require("../db/Models/index.js");
-const bcrypt = require("bcrypt");
+const app = require("../../app");
+const { createTables, wipeDBTables } = require("../../db/databaseHelpers.js");
+const { Courses } = require("../../db/Models/index.js");
+const createTutor = require("../../helpers/tutor/createTutor");
 
-let hashedPassword;
 let token;
 beforeAll(async() => {
   await createTables();
-  const pw = "1234";
-  try {
-    hashedPassword = await bcrypt.hash(pw, 10);
-  } catch(err) {
-    console.log("Errors while hashing password for tutor login test:");
-    console.error(err);
-  }
-  await Tutor.create({
-    tutor_id: "txiong4",
-    first_name: "JIMBO",
-    last_name: "Will",
-    gender: "M",
-    email: "txiong@",
-    password: hashedPassword
-  });
+  await createTutor(1, "tutor@email.com", "1234");
   const res = await request(app)
     .post("/login/tutor")
     .send({
-      email: "txiong@",
+      email: "tutor@email.com",
       password: "1234"
     })
     .set("Accept", "application/json");
@@ -40,7 +25,7 @@ afterAll(async() =>{
 describe("adding a course", () =>{
   test("adding a course to Courses table", async() =>{
     const res2 = await request(app)
-      .post("/addCourse")
+      .post("/tutor/addCourse")
       .send({
         course_name: "Algebra",
         initial_session_price: 12.50,
@@ -53,11 +38,11 @@ describe("adding a course", () =>{
     expect(findCourse.course_name).toBe("Algebra");
     expect(findCourse.initial_session_price).toBe(12.50);
     expect(findCourse.session_hourly_rate).toBe(30.98);
-    expect(findCourse.tutor_id).toBe("txiong4");
+    expect(findCourse.tutor_id).toBe("1");
   });
   test("course name is not valid", async() =>{
     const res2 = await request(app)
-      .post("/addCourse")
+      .post("/tutor/addCourse")
       .send({
         initial_session_price: 12.50,
         session_hourly_rate: 30.98
@@ -68,7 +53,7 @@ describe("adding a course", () =>{
   });
   test("initial session price is not valid", async() =>{
     const res2 = await request(app)
-      .post("/addCourse")
+      .post("/tutor/addCourse")
       .send({
         course_name: "Algebra",
         session_hourly_rate: 30.98
@@ -79,7 +64,7 @@ describe("adding a course", () =>{
   });
   test("session hourly rate is not valid", async() =>{
     const res2 = await request(app)
-      .post("/addCourse")
+      .post("/tutor/addCourse")
       .send({
         course_name: "Algebra",
         initial_session_price: 12.50
