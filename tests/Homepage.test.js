@@ -3,7 +3,7 @@ const request = require("supertest");
 const { createTables, wipeDBTables } = require("../db/databaseHelpers");
 const createStudent = require("../helpers/student/createStudent");
 const createParent = require("../helpers/parent/createParent");
-const createTutor = require("../helpers/tutor/createTutor");
+const createTutor = require("../helpers/createUser");
 beforeAll(async() => {
   await createTables();
 });

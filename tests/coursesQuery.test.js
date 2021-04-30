@@ -4,8 +4,8 @@ const request = require("supertest");
 const searchQuery = require("../helpers/searchQuery");
 const createStudent = require("../helpers/student/createStudent");
 const createParent = require("../helpers/parent/createParent");
-const createTutor = require("../helpers/tutor/createTutor");
-const createCourse = require("../helpers/tutor/createCourse");
+const createTutor = require("../helpers/createUser");
+const createCourse = require("../helpers/createCourse");
 
 let parentToken, studentToken, tutorToken;
 

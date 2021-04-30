@@ -2,7 +2,7 @@ const request = require("supertest");
 const app = require("../../app");
 const { createTables, wipeDBTables } = require("../../db/databaseHelpers.js");
 const { Courses } = require("../../db/Models/index.js");
-const createTutor = require("../../helpers/tutor/createTutor");
+const createTutor = require("../../helpers/createUser");
 
 let token;
 beforeAll(async() => {

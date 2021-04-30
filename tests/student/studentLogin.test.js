@@ -27,7 +27,7 @@ describe("POST /login/student", () =>{
       .set("Accept", "application/json");
   });
   it("should have a model in the db", async() => {
-    const user = await Student.findOne({ where: { student_id:"very_fancy_id" } });
+    const user = await Student.findOne({ where: { userId:"very_fancy_id" } });
     expect(user).toBeDefined();
     expect(user).not.toBeNull();
   });

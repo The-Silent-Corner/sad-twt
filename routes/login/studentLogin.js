@@ -14,7 +14,7 @@ router.post("/", async(req, res) =>{
     bcrypt.compare(password, findStudent.password, async(err, result) => {
       if(result)
       {
-        const token = jwt.sign({ user:findStudent.student_id, type: "student" }, process.env.SECRET, {
+        const token = jwt.sign({ user: findStudent.userId, type: "student" }, process.env.SECRET, {
           expiresIn: "1h"
         });
         res.cookie("user", token, {

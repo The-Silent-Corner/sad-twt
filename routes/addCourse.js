@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const jwtVerify = require("../../helpers/jwtVerify");
-const createCourse = require("../../helpers/tutor/createCourse");
+const createCourse = require("../../helpers/createCourse");
 
 router.post("/", async(req, res) =>{
   const decoded = await jwtVerify(req.signedCookies.user);

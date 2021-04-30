@@ -1,131 +1,115 @@
 const db = require("..");
 const { DataTypes } = require("sequelize");
 
-const Student = db.define("Student", {
-  student_id: {
+const Users = db.define("Users", {
+  id: {
     primaryKey: true,
     type: DataTypes.STRING
   },
-  first_name: {
+  firstName: {
     type: DataTypes.STRING,
     allowNull: true
   },
-  last_name: {
+  lastName: {
     type: DataTypes.STRING,
     allowNull: true
   },
   email: {
     type: DataTypes.STRING,
-    allowNull: false
-  },
-  gender: {
-    type: DataTypes.STRING,
-    allowNull: true
-  },
-  bio: {
-    type: DataTypes.STRING,
-    allowNull: true
+    allowNull: false,
+    unique: true
   },
   password: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  type: {
     type: DataTypes.STRING,
     allowNull: false
   }
 });
 
-const Parent = db.define("Parent", {
-  parent_id: {
+const StudentParent = db.define("StudentParent", {
+  studentId: {
+    type: DataTypes.STRING,
+    allowNull: false,
     primaryKey: true,
-    type: DataTypes.STRING,
-    allowNull: false
+    references: {
+      model: Users,
+      key: "id"
+    }
   },
-  first_name: {
+  parentId: {
     type: DataTypes.STRING,
-    allowNull: true
-  },
-  last_name: {
-    type: DataTypes.STRING,
-    allowNull: true
-  },
-  email: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
-  password: {
-    type: DataTypes.STRING,
-    allowNull: false
-  }
-});
-
-const Tutor = db.define("Tutor", {
-  tutor_id:{
+    allowNull: false,
     primaryKey: true,
-    type: DataTypes.STRING
-  },
-  first_name:{
-    type: DataTypes.STRING,
-    allowNull: true
-  },
-  last_name:{
-    type: DataTypes.STRING,
-    allowNull: true
-  },
-  email:{
-    type: DataTypes.STRING,
-    allowNull: false
-  },
-  gender:{
-    type: DataTypes.STRING,
-    allowNull: true
-  },
-  password:{
-    type: DataTypes.STRING,
-    allowNull: false
-  },
-  bio:{
-    type: DataTypes.STRING,
-    allowNull: true
+    references: {
+      model: Users,
+      key: "id"
+    }
   }
 });
 
 const Messages = db.define("Messages", {
-  message_id:{
+  id: {
     primaryKey: true,
     type: DataTypes.STRING
   },
-  message:{
+  message: {
     type: DataTypes.STRING,
     allowNull: false
   },
-  time_sent:{
+  timeSent: {
     type: DataTypes.TIME,
     allowNull: false
   },
-  sender:{
+  senderId: {
     type: DataTypes.STRING,
-    allowNull:  false
-  }
-});
-const Courses = db.define("Courses", {
-  courses_id:{
-    primaryKey: true,
-    type: DataTypes.STRING
+    allowNull:  false,
+    references: {
+      model: Users,
+      key: "id"
+    }
   },
-  course_name:{
+  receiverId: {
     type: DataTypes.STRING,
-    allowNull: false
-  },
-  initial_session_price:{
-    type: DataTypes.INTEGER,
-    allowNull: false
-  },
-  session_hourly_rate:{
-    type: DataTypes.INTEGER,
-    allowNull: false
+    allowNull: false,
+    references: {
+      model: Users,
+      key: "id"
+    }
   }
 });
 
-const Appointment = db.define("Appointments", {
-  appointment_id: {
+const Courses = db.define("Courses", {
+  id: {
+    primaryKey: true,
+    type: DataTypes.STRING
+  },
+  courseName:{
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  initialSessionPrice:{
+    type: DataTypes.FLOAT,
+    allowNull: false
+  },
+  sessionHourlyRate:{
+    type: DataTypes.FLOAT,
+    allowNull: false
+  },
+  tutorId: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    references: {
+      model: Users,
+      key: "id"
+    }
+  }
+});
+
+const Appointments = db.define("Appointments", {
+  id: {
     type: DataTypes.STRING,
     primaryKey: true
   },
@@ -140,10 +124,35 @@ const Appointment = db.define("Appointments", {
   location: {
     type: DataTypes.STRING,
     allowNull: false
+  },
+  courseId: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    reference: {
+      model: Courses,
+      key: "id"
+    }
+  },
+  studentId: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    references: {
+      model: Users,
+      key: "id"
+    }
+  },
+  tutorId: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    references: {
+      model: Users,
+      key: "id"
+    }
   }
 });
+
 const Transactions = db.define("Transactions", {
-  transaction_id:{
+  id:{
     primaryKey: true,
     type: DataTypes.STRING
   },
@@ -155,42 +164,24 @@ const Transactions = db.define("Transactions", {
     type: DataTypes.INTEGER,
     allowNull: false
   },
-  date_paid: {
+  datePaid: {
     type: DataTypes.DATE,
     allowNull: false
+  },
+  appointmentId: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    references: {
+      model: Appointments,
+      key: "id"
+    }
   }
 });
-const ParentStudent = db.define("ParentStudent", {
-  student_id: { type: DataTypes.STRING, isPrimary: true },
-  parent_id: { type: DataTypes.STRING, isPrimary: true }
-});
-
-//Student and Parent Joint Table
-Parent.belongsToMany(Student, { through: ParentStudent, foreignKey: "student_id", foreignKeyConstraint: true });
-Student.belongsToMany(Parent, { through: ParentStudent, foreignKey: "parent_id", foreignKeyConstraint: true });
-
-//Messages
-Tutor.hasMany(Messages, { foreignKey: "tutor_id", foreignKeyConstraint:true });
-Student.hasMany(Messages, { foreignKey: "student_id", foreignKeyConstraint:true });
-
-//Courses
-Tutor.hasMany(Courses, { foreignKey: "tutor_id", foreignKeyConstraint:true });
-
-// Appointments
-Appointment.belongsTo(Student, { foreignKey: "student_id", foreignKeyConstraint: true });
-Appointment.belongsTo(Tutor, { foreignKey: "tutor_id", foreignKeyConstraint: true });
-Appointment.belongsTo(Courses, { foreignKey: "course_id", foreignKeyConstraint: true });
-
-//Transactions
-Transactions.belongsTo(Appointment, { foreignKey: "appointment_id", foreignKeyConstraint:true });
 
 module.exports = {
-  Student: Student,
-  Parent: Parent,
-  Tutor: Tutor,
-  ParentStudent: ParentStudent,
-  Messages: Messages,
+  Users: Users,
+  StudentParent: StudentParent,
   Courses: Courses,
-  Appointment: Appointment,
-  Transactions: Transactions
+  Transactions: Transactions,
+  Appointments: Appointments
 };
