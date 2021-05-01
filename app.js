@@ -21,7 +21,7 @@ app.set("view engine", "ejs");
 app.use("/register", require("./routes/register"));
 app.use("/login", require("./routes/login"));
 app.get("/", async(req, res) => {
-  const { user } = req.signedCookies;
+  const { user } = req.cookies;
   const decoded = await jwtVerify(user);
   if(decoded) {
     const { type } = decoded;
@@ -45,9 +45,8 @@ app.get("/register", (req, res) => {
 app.get("/login", (req, res) => {
   res.render("login");
 });
-app.use("/student", require("./routes/student"));
-app.use("/tutor", require("./routes/tutor"));
-app.use("/parent", require("./routes/parent"));
 app.use("/search", require("./routes/search"));
+app.use("/updateUser", require("./routes/update"));
+app.use("/addCourse", require("./routes/addCourse"));
 
 module.exports = app;
