@@ -2,20 +2,15 @@ const request = require("supertest");
 const app = require("../../app");
 const { createTables, wipeDBTables } = require("../../db/databaseHelpers.js");
 const { Courses } = require("../../db/Models/index.js");
-const createTutor = require("../../helpers/createUser");
+const jwtGen = require("../../helpers/jwtGenerate");
+const createUser = require("../../helpers/createUser");
 
-let token;
+let authCookie;
 beforeAll(async() => {
   await createTables();
-  await createTutor(1, "tutor@email.com", "1234");
-  const res = await request(app)
-    .post("/login/tutor")
-    .send({
-      email: "tutor@email.com",
-      password: "1234"
-    })
-    .set("Accept", "application/json");
-  token = res["headers"]["set-cookie"][0];
+  await createUser("1", "tutor@email.com", "1234", "tutor");
+  const token = await jwtGen("1", "tutor");
+  authCookie = `user=${token}`;
 });
 
 afterAll(async() =>{
@@ -25,52 +20,52 @@ afterAll(async() =>{
 describe("adding a course", () =>{
   test("adding a course to Courses table", async() =>{
     const res2 = await request(app)
-      .post("/tutor/addCourse")
+      .post("/addCourse")
       .send({
-        course_name: "Algebra",
-        initial_session_price: 12.50,
-        session_hourly_rate: 30.98
+        courseName: "Algebra",
+        initialSessionPrice: 12.50,
+        sessionHourlyRate: 30.98
       })
       .set("Accept", "application/json")
-      .set("Cookie", [token]);
-    const findCourse = await Courses.findOne({ where:{ course_name: "Algebra" } });
+      .set("Cookie", [authCookie]);
+    const findCourse = await Courses.findOne({ where:{ courseName: "Algebra" } });
     expect(res2.status).toBe(200);
-    expect(findCourse.course_name).toBe("Algebra");
-    expect(findCourse.initial_session_price).toBe(12.50);
-    expect(findCourse.session_hourly_rate).toBe(30.98);
-    expect(findCourse.tutor_id).toBe("1");
+    expect(findCourse.courseName).toBe("Algebra");
+    expect(findCourse.initialSessionPrice).toBe(12.50);
+    expect(findCourse.sessionHourlyRate).toBe(30.98);
+    expect(findCourse.tutorId).toBe("1");
   });
-  test("course name is not valid", async() =>{
+  test("course name not in POST body", async() =>{
     const res2 = await request(app)
-      .post("/tutor/addCourse")
+      .post("/addCourse")
       .send({
-        initial_session_price: 12.50,
-        session_hourly_rate: 30.98
+        initialSessionPrice: 12.50,
+        sessionHourlyRate: 30.98
       })
       .set("Accept", "application/json")
-      .set("Cookie", [token]);
+      .set("Cookie", [authCookie]);
     expect(res2.status).toBe(400);
   });
   test("initial session price is not valid", async() =>{
     const res2 = await request(app)
-      .post("/tutor/addCourse")
+      .post("/addCourse")
       .send({
-        course_name: "Algebra",
-        session_hourly_rate: 30.98
+        courseName: "Algebra",
+        sessionHourlyRate: 30.98
       })
       .set("Accept", "application/json")
-      .set("Cookie", [token]);
+      .set("Cookie", [authCookie]);
     expect(res2.status).toBe(400);
   });
   test("session hourly rate is not valid", async() =>{
-    const res2 = await request(app)
-      .post("/tutor/addCourse")
+    const res = await request(app)
+      .post("/addCourse")
       .send({
-        course_name: "Algebra",
-        initial_session_price: 12.50
+        courseName: "Algebra",
+        initialSessionPrice: 12.50
       })
       .set("Accept", "application/json")
-      .set("Cookie", [token]);
-    expect(res2.status).toBe(400);
+      .set("Cookie", [authCookie]);
+    expect(res.status).toBe(400);
   });
 });

@@ -3,7 +3,7 @@ const router = express.Router();
 const { jwtVerify } = require("../helpers/jwtVerify");
 
 router.post("/", async(req, res) =>{
-  if(req.signedCookies.user)
+  if(req.cookies.user)
   {
     const valid = await jwtVerify(req, res);
     if(!valid)

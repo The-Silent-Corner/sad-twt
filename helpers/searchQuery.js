@@ -4,7 +4,7 @@ const { Op } = require("sequelize");
 async function searchQuery(course) {
   const list = await Courses.findAll({
     where:{
-      course_name: {
+      courseName: {
         [Op.like]: `%${course}%`
       }
     }

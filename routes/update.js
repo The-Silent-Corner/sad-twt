@@ -1,14 +1,16 @@
 const router = require("express").Router();
-const updateUsers = require("../helpers/updateUsers");
+const jwtVerify = require("../helpers/jwtVerify");
+const UpdateUser = require("../helpers/updateUsers");
 
-router.post("/", async(req, res) => {
-  const decoded = await jwtVerify(req.signedCookies.user);
+router.post("/", require("../routes/middleware/checkLoggedIn"), async(req, res) => {
   const { firstName, lastName } = req.body;
-  if(!firstName || !decoded || !lastName) {
-    return false;
+  if(!firstName || !lastName) {
+    return res.status(400).json({ message: "invalid post body" });
   }
   try {
-    await UpdateUser(decoded.user, firstName, lastName);
+    if(!(await UpdateUser(req.user.id, firstName, lastName))) {
+      res.status(500).json({ message: "UpdateUser function failed" });
+    }
   } catch(err) {
     return res.sendStatus(500);
   }
