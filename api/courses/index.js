@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const createCourse = require("../../helpers/createCourse");
+const createCourse = require("../../helpers/Courses/createCourse");
 const loginMiddleware = require("../../middleware/checkLoggedIn");
 
 router.post("/", loginMiddleware, async(req, res) => {

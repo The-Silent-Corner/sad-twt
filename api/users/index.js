@@ -1,8 +1,8 @@
 const router = require("express").Router();
-const searchQuery = require("../../helpers/searchQuery");
-const createUser = require("../../helpers/createUser");
+const searchQuery = require("../../helpers/Courses/searchQuery");
+const createUser = require("../../helpers/Users/createUser");
 const { v4 } = require("uuid");
-const UpdateUser = require("../../helpers/updateUsers");
+const UpdateUser = require("../../helpers/Users/updateUsers");
 const loginMiddleware = require("../../middleware/checkLoggedIn");
 
 //register
