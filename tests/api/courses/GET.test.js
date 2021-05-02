@@ -1,9 +1,9 @@
 const app = require("../../../app");
 const { createTables, wipeDBTables } = require("../../../db/databaseHelpers");
 const request = require("supertest");
-const searchQuery = require("../../../helpers/searchQuery");
-const createCourse = require("../../../helpers/createCourse");
-const createUser = require("../../../helpers/createUser");
+const searchQuery = require("../../../helpers/Courses/searchQuery");
+const createCourse = require("../../../helpers/Courses/createCourse");
+const createUser = require("../../../helpers/Users/createUser");
 
 let parentToken;
 beforeAll(async() => {
@@ -17,7 +17,7 @@ afterAll(async() =>{
   await wipeDBTables();
 });
 
-describe("GET /search", () =>{
+describe("GET /api/courses", () =>{
   describe("no token", () =>{
     it("should return 401", async() =>{
       const res = await request(app)

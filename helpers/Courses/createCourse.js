@@ -1,4 +1,4 @@
-const { Courses } = require("../db/Models");
+const { Courses } = require("../../db/Models");
 const { v4 } = require("uuid");
 
 async function createCourse(tutorId, courseName, initSessionPrice, hourlySessionPrice) {

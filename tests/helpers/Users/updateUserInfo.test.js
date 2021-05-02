@@ -1,8 +1,8 @@
 require("dotenv").config();
-const { createTables, wipeDBTables } = require("../../db/databaseHelpers");
-const { Users } = require("../../db/Models");
-const createUser = require("../../helpers/createUser");
-const UpdateUser = require("../../helpers/updateUsers");
+const { createTables, wipeDBTables } = require("../../../db/databaseHelpers");
+const { Users } = require("../../../db/Models");
+const createUser = require("../../../helpers/Users/createUser");
+const UpdateUser = require("../../../helpers/Users/updateUsers");
 beforeAll(async() =>{
   await createTables();
 });

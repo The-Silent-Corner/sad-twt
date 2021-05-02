@@ -3,7 +3,7 @@ const app = require("../../../app");
 const { createTables, wipeDBTables } = require("../../../db/databaseHelpers.js");
 const { Courses } = require("../../../db/Models");
 const jwtGen = require("../../../helpers/jwtGenerate");
-const createUser = require("../../../helpers/createUser");
+const createUser = require("../../../helpers/Users/createUser");
 
 let authCookie;
 beforeAll(async() => {

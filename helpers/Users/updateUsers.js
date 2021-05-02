@@ -1,4 +1,4 @@
-const { Users } = require("../db/Models");
+const { Users } = require("../../db/Models");
 
 async function UpdateUser(id, firstName, lastName) {
   try {

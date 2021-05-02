@@ -1,7 +1,7 @@
 const app = require("../../../app");
 const request = require("supertest");
 const jwtGenerate = require("../../../helpers/jwtGenerate");
-const createUser = require("../../../helpers/createUser");
+const createUser = require("../../../helpers/Users/createUser");
 const { Users } = require("../../../db/Models");
 const dbHelpers = require("../../../db/databaseHelpers");
 
