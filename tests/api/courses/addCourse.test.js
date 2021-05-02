@@ -1,9 +1,9 @@
 const request = require("supertest");
-const app = require("../app");
-const { createTables, wipeDBTables } = require("../db/databaseHelpers.js");
-const { Courses } = require("../db/Models/index.js");
-const jwtGen = require("../helpers/jwtGenerate");
-const createUser = require("../helpers/createUser");
+const app = require("../../../app");
+const { createTables, wipeDBTables } = require("../../../db/databaseHelpers.js");
+const { Courses } = require("../../../db/Models");
+const jwtGen = require("../../../helpers/jwtGenerate");
+const createUser = require("../../../helpers/createUser");
 
 let authCookie;
 beforeAll(async() => {
@@ -17,7 +17,7 @@ afterAll(async() =>{
   await wipeDBTables();
 });
 
-describe("adding a course", () =>{
+describe("POST /api/courses", () =>{
   test("adding a course to Courses table", async() =>{
     const res2 = await request(app)
       .post("/api/courses")

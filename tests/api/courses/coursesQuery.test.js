@@ -1,9 +1,9 @@
-const app = require("../app");
-const { createTables, wipeDBTables } = require("../db/databaseHelpers");
+const app = require("../../../app");
+const { createTables, wipeDBTables } = require("../../../db/databaseHelpers");
 const request = require("supertest");
-const searchQuery = require("../helpers/searchQuery");
-const createCourse = require("../helpers/createCourse");
-const createUser = require("../helpers/createUser");
+const searchQuery = require("../../../helpers/searchQuery");
+const createCourse = require("../../../helpers/createCourse");
+const createUser = require("../../../helpers/createUser");
 
 let parentToken;
 beforeAll(async() => {

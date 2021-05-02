@@ -1,9 +1,9 @@
-const app = require("../../app");
+const app = require("../../../app");
 const request = require("supertest");
-const jwtGenerate = require("../../helpers/jwtGenerate");
-const createUser = require("../../helpers/createUser");
-const { Users } = require("../../db/Models");
-const dbHelpers = require("../../db/databaseHelpers");
+const jwtGenerate = require("../../../helpers/jwtGenerate");
+const createUser = require("../../../helpers/createUser");
+const { Users } = require("../../../db/Models");
+const dbHelpers = require("../../../db/databaseHelpers");
 
 beforeAll(async() => {
   await dbHelpers.createTables();
