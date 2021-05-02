@@ -1,6 +1,6 @@
 const router = require("express").Router();
-const isValidUser = require("../helpers/isValidUser");
-const jwtGen = require("../helpers/jwtGenerate");
+const isValidUser = require("../../helpers/isValidUser");
+const jwtGen = require("../../helpers/jwtGenerate");
 
 router.post("/", async(req, res) => {
   const { email, password } = req.body;

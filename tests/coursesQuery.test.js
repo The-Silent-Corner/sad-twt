@@ -3,18 +3,14 @@ const { createTables, wipeDBTables } = require("../db/databaseHelpers");
 const request = require("supertest");
 const searchQuery = require("../helpers/searchQuery");
 const createCourse = require("../helpers/createCourse");
-const jwtGen = require("../helpers/jwtGenerate");
 const createUser = require("../helpers/createUser");
 
-let parentToken, studentToken, tutorToken;
+let parentToken;
 beforeAll(async() => {
   await createTables();
   await createUser("1", "student@email.com", "1234", "student");
   await createUser("2", "tutor@email.com", "1234", "tutor");
   await createUser("3", "parent@email.com", "1234", "parent");
-  const studentToken = `user=${await jwtGen("1", "student")}`;
-  const tutorToken = `user=${await jwtGen("2", "tutor")}`;
-  const parentToken = `user=${await jwtGen("3", "parent")}`;
 });
  
 afterAll(async() =>{
@@ -25,7 +21,7 @@ describe("GET /search", () =>{
   describe("no token", () =>{
     it("should return 401", async() =>{
       const res = await request(app)
-        .get("/search");
+        .get("/api/users");
       expect(res.status).toBe(401);
     });
   });
@@ -33,7 +29,7 @@ describe("GET /search", () =>{
   describe("token type is parent", () =>{
     it("should return 401", async() =>{
       const res = await request(app)
-        .get("/search")
+        .get("/api/users")
         .set("Cookie", [parentToken]);
       expect(res.status).toBe(401);
     });

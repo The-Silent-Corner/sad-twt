@@ -16,7 +16,7 @@ describe("registering a user", () => {
     describe("a tutor", () => {
       it("registers a tutor", async() => {
         const res = await request(app)
-          .post("/register")
+          .post("/api/users")
           .set("Accept", "application/json")
           .send({
             email: "tutor@email.com",
@@ -34,7 +34,7 @@ describe("registering a user", () => {
     describe("a parent", () => {
       it("registers a parent", async() => {
         const res = await request(app)
-          .post("/register")
+          .post("/api/users")
           .set("Accept", "application/json")
           .send({
             email: "parent@email.com",
@@ -48,7 +48,7 @@ describe("registering a user", () => {
     describe("a student", () => {
       it("registers a student", async() => {
         const res = await request(app)
-          .post("/register")
+          .post("/api/users")
           .set("Accept", "application/json")
           .send({
             email: "student@email.com",
@@ -64,7 +64,7 @@ describe("registering a user", () => {
     let res;
     beforeAll(async() => {
       res = await request(app)
-        .post("/register")
+        .post("/api/users")
         .set("Accept", "application/json")
         .send({
           email: "user@email.com",

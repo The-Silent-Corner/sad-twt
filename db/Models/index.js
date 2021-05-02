@@ -183,5 +183,6 @@ module.exports = {
   StudentParent: StudentParent,
   Courses: Courses,
   Transactions: Transactions,
-  Appointments: Appointments
+  Appointments: Appointments,
+  Messages: Messages
 };

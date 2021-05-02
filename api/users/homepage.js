@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { jwtVerify } = require("../helpers/jwtVerify");
+const { jwtVerify } = require("../../helpers/jwtVerify");
 
 router.post("/", async(req, res) =>{
   if(req.cookies.user)

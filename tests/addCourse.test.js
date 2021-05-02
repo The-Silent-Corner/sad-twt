@@ -1,9 +1,9 @@
 const request = require("supertest");
-const app = require("../../app");
-const { createTables, wipeDBTables } = require("../../db/databaseHelpers.js");
-const { Courses } = require("../../db/Models/index.js");
-const jwtGen = require("../../helpers/jwtGenerate");
-const createUser = require("../../helpers/createUser");
+const app = require("../app");
+const { createTables, wipeDBTables } = require("../db/databaseHelpers.js");
+const { Courses } = require("../db/Models/index.js");
+const jwtGen = require("../helpers/jwtGenerate");
+const createUser = require("../helpers/createUser");
 
 let authCookie;
 beforeAll(async() => {
@@ -20,7 +20,7 @@ afterAll(async() =>{
 describe("adding a course", () =>{
   test("adding a course to Courses table", async() =>{
     const res2 = await request(app)
-      .post("/addCourse")
+      .post("/api/courses")
       .send({
         courseName: "Algebra",
         initialSessionPrice: 12.50,
@@ -37,7 +37,7 @@ describe("adding a course", () =>{
   });
   test("course name not in POST body", async() =>{
     const res2 = await request(app)
-      .post("/addCourse")
+      .post("/api/courses")
       .send({
         initialSessionPrice: 12.50,
         sessionHourlyRate: 30.98
@@ -48,7 +48,7 @@ describe("adding a course", () =>{
   });
   test("initial session price is not valid", async() =>{
     const res2 = await request(app)
-      .post("/addCourse")
+      .post("/api/courses")
       .send({
         courseName: "Algebra",
         sessionHourlyRate: 30.98
@@ -59,7 +59,7 @@ describe("adding a course", () =>{
   });
   test("session hourly rate is not valid", async() =>{
     const res = await request(app)
-      .post("/addCourse")
+      .post("/api/courses")
       .send({
         courseName: "Algebra",
         initialSessionPrice: 12.50

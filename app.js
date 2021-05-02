@@ -4,7 +4,8 @@ const cors = require("cors");
 const app = express();
 const path = require("path");
 const cookieParser = require("cookie-parser");
-const jwtVerify = require("./helpers/jwtVerify");
+const isValidUser = require("./helpers/isValidUser");
+const jwtGen = require("./helpers/jwtGenerate");
 
 /**
  * Middleware Setup
@@ -14,39 +15,41 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cors()); // TODO: configure me if needs be
 app.use(cookieParser(process.env.SECRET));
 app.use(express.static(path.join(__dirname, "public")));
-app.set("view engine", "ejs");
 /**
  * Define your routes below, or pass them around to an Express router.
  */
-app.use("/register", require("./routes/register"));
-app.use("/login", require("./routes/login"));
+app.use("/api", require("./api"));
 app.get("/", async(req, res) => {
-  const { user } = req.cookies;
-  const decoded = await jwtVerify(user);
-  if(decoded) {
-    const { type } = decoded;
-    if(type === "student") {
-      return res.render("student/home");
-    } else if(type === "parent") {
-      return res.render("parent/home");
-    } else if(type === "tutor") {
-      return res.render("tutor/home");
-    }
-  }
-  res.render("index");
+  res.json({ message: "welcome to our api!" });
 });
 app.get("/logout", async(req, res) => {
   res.clearCookie("user");
   res.redirect("/");
 });
-app.get("/register", (req, res) => {
-  res.render("register");
-});
-app.get("/login", (req, res) => {
-  res.render("login");
-});
-app.use("/search", require("./routes/search"));
-app.use("/updateUser", require("./routes/update"));
-app.use("/addCourse", require("./routes/addCourse"));
 
+app.post("/login", async(req, res) => {
+  const { email, password } = req.body;
+  if(!email || !password) {
+    return res.status.json({ message: "INVALID_BODY" });
+  }
+  const validity = await isValidUser(email, password);
+  if(!validity) {
+    const { stackTrace, message } = validity;
+    if(stackTrace && message) {
+      console.error(message);
+      console.error(stackTrace);
+      return res.sendStatus(500);
+    }
+    return res.sendStatus(401);
+  }
+  const { id: userId, type: userType } = validity;
+  const token = jwtGen(userId, userType);
+  res.cookie("user", token, {
+    httpOnly: true,
+    maxAge: 3600 * 24 * 1000, // expires 1 day
+    sameSite: "strict",
+    secure: process.env.NODE_ENV === "production"
+  });
+  res.redirect("/");
+});
 module.exports = app;

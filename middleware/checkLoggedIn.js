@@ -1,4 +1,4 @@
-const jwtVerify = require("../../helpers/jwtVerify");
+const jwtVerify = require("../helpers/jwtVerify");
 module.exports = async function(req, res, next) {
   const { user } = req.cookies;
   if(!user) {

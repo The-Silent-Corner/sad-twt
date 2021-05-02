@@ -13,11 +13,11 @@ afterAll(async() => {
   await dbHelpers.wipeDBTables();
 });
 
-describe("POST /updateUser", () => {
+describe("POST /api/users", () => {
   describe("without a jwt token", () => {
     it("should return 401", async() => {
       const res = await request(app)
-        .post("/updateUser")
+        .put("/api/users")
         .set("Accept", "application/json");
       expect(res.status).toEqual(401);
     });
@@ -28,7 +28,7 @@ describe("POST /updateUser", () => {
         await createUser("1", "user@email.com", "123", "student");
         const token = jwtGenerate("1", "student");
         const res = await request(app)
-          .post("/updateUser")
+          .put("/api/users")
           .set("Accept", "application/json")
           .set("Cookie", [`user=${token}`])
           .send({
