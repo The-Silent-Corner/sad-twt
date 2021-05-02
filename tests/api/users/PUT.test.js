@@ -42,4 +42,32 @@ describe("POST /api/users", () => {
       });
     });
   });
+  describe("first name is not provided", () =>{
+    it("should return 400", async() =>{
+      await createUser("1", "user@email.com", "123", "student");
+      const token = jwtGenerate("1", "student");
+      const res = await request(app)
+        .put("/api/users")
+        .set("Accept", "application/json")
+        .set("Cookie", [`user=${token}`])
+        .send({
+          lastName: "squarepants"
+        });
+      expect(res.status).toEqual(400);
+    });
+  });
+  describe("last name is not provided", () =>{
+    it("should return 400", async() =>{
+      await createUser("1", "user@email.com", "123", "student");
+      const token = jwtGenerate("1", "student");
+      const res = await request(app)
+        .put("/api/users")
+        .set("Accept", "application/json")
+        .set("Cookie", [`user=${token}`])
+        .send({
+          firstName: "sponge"
+        });
+      expect(res.status).toEqual(400);
+    });
+  });
 });

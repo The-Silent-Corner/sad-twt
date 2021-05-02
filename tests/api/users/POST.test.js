@@ -11,11 +11,12 @@ afterAll(async() => {
   await wipeDBTables();
 });
 
+let res;
 describe("registering a user", () => {
   describe("register a valid user type", () => {
     describe("a tutor", () => {
       it("registers a tutor", async() => {
-        const res = await request(app)
+        res = await request(app)
           .post("/api/users")
           .set("Accept", "application/json")
           .send({
@@ -33,7 +34,7 @@ describe("registering a user", () => {
     });
     describe("a parent", () => {
       it("registers a parent", async() => {
-        const res = await request(app)
+        res = await request(app)
           .post("/api/users")
           .set("Accept", "application/json")
           .send({
@@ -47,7 +48,7 @@ describe("registering a user", () => {
     });
     describe("a student", () => {
       it("registers a student", async() => {
-        const res = await request(app)
+        res = await request(app)
           .post("/api/users")
           .set("Accept", "application/json")
           .send({
@@ -61,7 +62,6 @@ describe("registering a user", () => {
     });
   });
   describe("registering as a non valid user type", () => {
-    let res;
     beforeAll(async() => {
       res = await request(app)
         .post("/api/users")
@@ -74,6 +74,72 @@ describe("registering a user", () => {
         });
     });
     it("should fail", () => {
+      expect(res.status).toEqual(400);
+    });
+  });
+  describe("email is not provided", () =>{
+    it("should return 400", async() =>{
+      res = await request(app)
+        .post("/api/users")
+        .set("Accept", "application/json")
+        .send({
+          password1: "password",
+          password2: "password",
+          type: "student"
+        });
+      expect(res.status).toEqual(400);
+    });
+  });
+  describe("password1 is not provided", () =>{
+    it("should return 400", async() =>{
+      res = await request(app)
+        .post("/api/users")
+        .set("Accept", "application/json")
+        .send({
+          email: "user@email.com",
+          password2: "password",
+          type: "student"
+        });
+      expect(res.status).toEqual(400);
+    });
+  });
+  describe("password2 is not provided", () =>{
+    it("should return 400", async() =>{
+      res = await request(app)
+        .post("/api/users")
+        .set("Accept", "application/json")
+        .send({
+          email: "user@email.com",
+          password1: "password",
+          type: "student"
+        });
+      expect(res.status).toEqual(400);
+    });
+  });
+  describe("type is not provided", () =>{
+    it("should return 400", async() =>{
+      res = await request(app)
+        .post("/api/users")
+        .set("Accept", "application/json")
+        .send({
+          email: "user@email.com",
+          password1: "password",
+          password2: "password"
+        });
+      expect(res.status).toEqual(400);
+    });
+  });
+  describe("password1 does not match password2", () =>{
+    it("should return 400", async() =>{
+      res = await request(app)
+        .post("/api/users")
+        .set("Accept", "application/json")
+        .send({
+          email: "user@email.com",
+          password1: "password132321",
+          password2: "password",
+          type: "student"
+        });
       expect(res.status).toEqual(400);
     });
   });

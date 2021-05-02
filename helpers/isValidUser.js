@@ -19,9 +19,8 @@ async function isValidUser(email, password) {
       stackTrace: err
     };
   }
-  try {
-    await bcrypt.compare(password, user.password);
-  } catch(err) {
+  const res = await bcrypt.compare(password, user.password);
+  if(!res) {
     return false;
   }
   return { type: user.type, id: user.id };
