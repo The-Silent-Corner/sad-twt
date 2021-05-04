@@ -4,14 +4,12 @@ const { v4 } = require("uuid");
 const UpdateUser = require("../../helpers/Users/updateUsers");
 const loginMiddleware = require("../../middleware/checkLoggedIn");
 
-//register
 router.post("/", async(req, res) =>{
   const { email, password1, password2, type } = req.body;
   if(!email || !password1 || !password2 || !type) {
     return res.sendStatus(400);
   }
   if(password1 != password2) {
-    // flash error message later
     return res.sendStatus(400);
   }
   if(type !== "tutor" && type !== "student" && type !== "parent") {
@@ -25,7 +23,6 @@ router.post("/", async(req, res) =>{
   res.end();
 });
 
-//update
 router.put("/", loginMiddleware, async(req, res) =>{
   const { firstName, lastName } = req.body;
   if(!firstName || !lastName) {

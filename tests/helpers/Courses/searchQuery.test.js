@@ -14,9 +14,9 @@ afterAll(async() =>{
 
 describe("testing the search query", () =>{
   beforeAll(async() => {
-    await createCourse("2", "Algebra 2", 100, 12.50);
-    await createCourse("2", "hello AlgebraI", 100, 12.50);
-    await createCourse("2", "pre Algebra 3", 100, 12.50);
+    await createCourse("1", "2", "Algebra 2", 100, 12.50);
+    await createCourse("2", "2", "hello AlgebraI", 100, 12.50);
+    await createCourse("3", "2", "pre Algebra 3", 100, 12.50);
   });
   it("should return 3", async() => {
     const list = await searchQuery("Algebra");

@@ -14,7 +14,7 @@ afterAll(async() => {
 describe("The createCourse fn", () => {
   it("should insert a course", async() => {
     await createUser("1", "tutor@email.com", "1234", "tutor");
-    await createCourse("1", "algebra", 10, 10);
+    await createCourse("1", "1", "algebra", 10, 10);
     const course = await Courses.findOne({ where: { tutorId: "1", courseName: "algebra" } });
     expect(course).toBeDefined();
     expect(course).not.toBeNull();

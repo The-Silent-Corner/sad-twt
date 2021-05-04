@@ -7,7 +7,7 @@ beforeAll(async() =>{
   await createTables();
   await createUser("1", "student@email.com", "password", "student");
   await createUser("2", "tutor@email.com", "password", "tutor");
-  await createCourse("2", "Algebra", 12, 20);
+  await createCourse("1", "2", "Algebra", 12, 20);
 });
 afterAll(async() =>{
   await wipeDBTables();

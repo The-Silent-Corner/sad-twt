@@ -10,7 +10,6 @@ async function UpdateUser(id, firstName, lastName) {
     user.lastName = lastName;
     await user.save();
   } catch(err) {
-    console.error(`Unable to save user ${id}`);
     return false;
   }
   return true;

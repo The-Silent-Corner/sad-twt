@@ -1,9 +1,8 @@
 const { Courses } = require("../../db/Models");
-const { v4 } = require("uuid");
 
-async function createCourse(tutorId, courseName, initSessionPrice, hourlySessionPrice) {
+async function createCourse(id, tutorId, courseName, initSessionPrice, hourlySessionPrice) {
   await Courses.create({
-    id: v4(),
+    id: id,
     courseName: courseName,
     initialSessionPrice: initSessionPrice,
     sessionHourlyRate: hourlySessionPrice,

@@ -38,12 +38,18 @@ describe("GET /api/courses", () =>{
   });
   
   describe("query string does not exist", () => {
-    it("shoudld return 400", async() => {
+    beforeAll(async() => {
+      await createCourse("432", "2", "Algebra 2", 100, 12.50);
+      await createCourse("423", "2", "hello AlgebraI", 100, 12.50);
+      await createCourse("244", "2", "pre Algebra 3", 100, 12.50);
+    });
+    it("should return all of the courses", async() => {
       const res = await request(app)
         .get("/api/courses")
         .set("Cookie", [studentToken])
         .query({});
-      expect(res.status).toEqual(400);
+      expect(res.body.courses).toBeDefined();
+      expect(res.body.courses).not.toBeNull();
     });
   });
   describe("query string is less than 3 characters", () => {
@@ -57,11 +63,11 @@ describe("GET /api/courses", () =>{
       expect(res.status).toEqual(400);
     });
   });
-  describe("a valid string", () =>{
+  describe("a list of courses that have 'Algebra' in their name", () =>{
     beforeAll(async() => {
-      await createCourse("2", "Algebra 2", 100, 12.50);
-      await createCourse("2", "hello AlgebraI", 100, 12.50);
-      await createCourse("2", "pre Algebra 3", 100, 12.50);
+      await createCourse("1", "2", "Algebra 2", 100, 12.50);
+      await createCourse("2", "2", "hello AlgebraI", 100, 12.50);
+      await createCourse("3", "2", "pre Algebra 3", 100, 12.50);
     });
     it("should return a list", async() => {
       const res = await request(app)

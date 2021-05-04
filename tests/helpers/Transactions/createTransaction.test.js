@@ -8,7 +8,7 @@ beforeAll(async() =>{
   await createTables();
   await createUser("1", "txiong@", "password", "student");
   await createUser("2", "tutor@", "password", "tutor");
-  await createCourse("2", "History", 12, 334);
+  await createCourse("1", "2", "History", 12, 334);
   await createAppointment("1", "pending", new Date().toISOString(), "campus", "2", "1", "2");
 });
 afterAll(async() =>{
