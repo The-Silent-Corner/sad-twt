@@ -1,9 +1,9 @@
 const { Appointments } = require("../../db/Models");
 
-async function createAppointment(id, status, time, location, courseId, studentId, tutorId){
-  const appointment = await Appointments.findOne({where:{id:id}});
-  if(appointment){
-    return false
+async function createAppointment(id, status, time, location, courseId, studentId, tutorId) {
+  const appointment = await Appointments.findOne({ where:{ id:id } });
+  if(appointment) {
+    return false;
   }
   try{
     await Appointments.create({
@@ -14,11 +14,11 @@ async function createAppointment(id, status, time, location, courseId, studentId
       courseId: courseId,
       studentId: studentId,
       tutorId: tutorId
-    })
+    });
   }catch(err)
   {
-    return false
+    return false;
   }
   return true;
 }
-module.exports = createAppointment
+module.exports = createAppointment;

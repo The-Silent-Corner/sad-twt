@@ -6,24 +6,24 @@ const { createTables, wipeDBTables } = require("../../../db/databaseHelpers");
 
 beforeAll(async() =>{
   await createTables();
-  await createUser("1","txiong@","password","student");
-  await createUser("2","tutor@","password","tutor");
-  await createCourse("2","History",12,334);
-  await createAppointment("1", "pending", new Date(), "campus","2","1","2");
+  await createUser("1", "txiong@", "password", "student");
+  await createUser("2", "tutor@", "password", "tutor");
+  await createCourse("2", "History", 12, 334);
+  await createAppointment("1", "pending", new Date(), "campus", "2", "1", "2");
 });
 afterAll(async() =>{
   await wipeDBTables();
 });
 describe("creating a transaction in model", () =>{
   it("should return true", async() =>{
-    const transaction = await createTransaction("1","almost paid", 133234, new Date(), "1");
+    const transaction = await createTransaction("1", "almost paid", 133234, new Date(), "1");
     expect(transaction).toEqual(true);
   });
 });
 describe("transaction id already exists", () =>{
   it("should return false", async() =>{
-    const transaction1 = await createTransaction("1","almost paid", 133234, new Date(), "1");
-    const transaction2 = await createTransaction("1","almost paid", 133234, new Date(), "1");
+    await createTransaction("1", "almost paid", 133234, new Date(), "1");
+    const transaction2 = await createTransaction("1", "almost paid", 133234, new Date(), "1");
     expect(transaction2).toEqual(false);
   });
 });

@@ -1,9 +1,9 @@
 const { Transactions } = require("../../db/Models");
 
-async function createTransaction(id, status, amount, datePaid, appointmentId){
-  const transaction = await Transactions.findOne({where:{id:id}})
-  if(transaction){
-    return false
+async function createTransaction(id, status, amount, datePaid, appointmentId) {
+  const transaction = await Transactions.findOne({ where:{ id:id } });
+  if(transaction) {
+    return false;
   }
   try{
     await Transactions.create({
@@ -12,11 +12,11 @@ async function createTransaction(id, status, amount, datePaid, appointmentId){
       amount: amount,
       datePaid: datePaid,
       appointmentId: appointmentId
-    })
+    });
   }catch(err)
   {
-    return false
+    return false;
   }
-  return true
+  return true;
 }
-module.exports = createTransaction
+module.exports = createTransaction;

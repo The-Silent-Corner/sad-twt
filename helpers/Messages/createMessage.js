@@ -1,9 +1,9 @@
 const { Messages } = require("../../db/Models");
 
-async function createMessage(id, senderId, receiverId, message){
-  const msg = await Messages.findOne({where:{id:id}})
-  if(msg){
-    return false
+async function createMessage(id, senderId, receiverId, message) {
+  const msg = await Messages.findOne({ where:{ id:id } });
+  if(msg) {
+    return false;
   }
   try{
     await Messages.create({
@@ -12,11 +12,11 @@ async function createMessage(id, senderId, receiverId, message){
       receiverId: receiverId,
       timeSent: new Date(),
       message: message
-    })
-  }catch(err){
-    console.log(err)
-    return false
+    });
+  }catch(err) {
+    console.log(err);
+    return false;
   }
-  return true
+  return true;
 }
-module.exports = createMessage
+module.exports = createMessage;

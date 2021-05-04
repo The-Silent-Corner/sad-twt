@@ -20,7 +20,7 @@ describe("login endpoint test", () =>{
         .send({
           email: "wrongEmail",
           password: "password"
-        })
+        });
       expect(res.status).toEqual(401);
     });
   });
