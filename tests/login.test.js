@@ -1,7 +1,7 @@
 const request = require("supertest");
-const createUser = require("../../../helpers/Users/createUser");
-const { createTables, wipeDBTables } = require("../../../db/databaseHelpers");
-const app = require("../../../app");
+const createUser = require("../helpers/Users/createUser");
+const { createTables, wipeDBTables } = require("../db/databaseHelpers");
+const app = require("../app");
 
 beforeAll(async() =>{
   await createTables();

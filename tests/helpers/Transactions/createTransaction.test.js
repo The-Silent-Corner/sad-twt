@@ -3,6 +3,7 @@ const createTransaction = require("../../../helpers/Transactions/createTransacti
 const createUser = require("../../../helpers/Users/createUser");
 const createCourse = require("../../../helpers/Courses/createCourse");
 const { createTables, wipeDBTables } = require("../../../db/databaseHelpers");
+const { TransactionStatus } = require("../../../statusConstants");
 
 beforeAll(async() =>{
   await createTables();
@@ -16,14 +17,14 @@ afterAll(async() =>{
 });
 describe("creating a transaction in model", () =>{
   it("should return true", async() =>{
-    const transaction = await createTransaction("1", "almost paid", 133234, new Date().toISOString(), "1");
+    const transaction = await createTransaction("1", TransactionStatus.NotPaid, 133234, new Date().toISOString(), "1");
     expect(transaction).toEqual(true);
   });
 });
 describe("transaction id already exists", () =>{
   it("should return false", async() =>{
-    await createTransaction("1", "almost paid", 133234, 234, "1");
-    const transaction2 = await createTransaction("1", "almost paid", 133234, new Date().toISOString(), "1");
+    await createTransaction("1", TransactionStatus.Pending, 133234, 234, "1");
+    const transaction2 = await createTransaction("1", TransactionStatus.Paid, 133234, new Date().toISOString(), "1");
     expect(transaction2).toEqual(false);
   });
 });

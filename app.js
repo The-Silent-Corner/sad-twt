@@ -11,7 +11,7 @@ const jwtGen = require("./helpers/jwtGenerate");
  */
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cors()); // TODO: configure me if needs be
+app.use(cors({ origin:"http://localhost:3000", credentials: true }));
 app.use(cookieParser(process.env.SECRET));
 /**
  * Define your routes below, or pass them around to an Express router.
@@ -28,7 +28,7 @@ app.get("/logout", async(req, res) => {
 app.post("/login", async(req, res) => {
   const { email, password } = req.body;
   if(!email || !password) {
-    return res.status.json({ message: "INVALID_BODY" });
+    return res.status(400).json({ message: "INVALID_BODY" });
   }
   const validity = await isValidUser(email, password);
   if(!validity) {
@@ -41,13 +41,13 @@ app.post("/login", async(req, res) => {
     return res.sendStatus(401);
   }
   const { id: userId, type: userType } = validity;
-  const token = jwtGen(userId, userType);
+  const token = jwtGen(userId, userType); //test token
   res.cookie("user", token, {
     httpOnly: true,
     maxAge: 3600 * 24 * 1000, // expires 1 day
-    sameSite: "strict",
+    sameSite: "lax",
     secure: process.env.NODE_ENV === "production"
   });
-  res.redirect("/");
+  res.end();
 });
 module.exports = app;
