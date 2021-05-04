@@ -11,7 +11,7 @@ afterAll(async() =>{
   await wipeDBTables();
 });
 describe("creating a message", () =>{
-  it("should return true", async() =>{
+  it("should insert a message into the database", async() =>{
     const message = await createMessage("messageId", "studentId", "tutorId", "hello");
     expect(message).toEqual(true);
   });
