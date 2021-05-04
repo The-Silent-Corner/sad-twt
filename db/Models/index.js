@@ -60,7 +60,7 @@ const Messages = db.define("Messages", {
     allowNull: false
   },
   timeSent: {
-    type: DataTypes.DATE,
+    type: DataTypes.STRING,
     allowNull: false
   },
   senderId: {
@@ -118,7 +118,7 @@ const Appointments = db.define("Appointments", {
     allowNull: false
   },
   time: {
-    type: DataTypes.DATE,
+    type: DataTypes.STRING,
     allowNull: false
   },
   location: {
@@ -165,7 +165,7 @@ const Transactions = db.define("Transactions", {
     allowNull: false
   },
   datePaid: {
-    type: DataTypes.DATE,
+    type: DataTypes.STRING,
     allowNull: false
   },
   appointmentId: {

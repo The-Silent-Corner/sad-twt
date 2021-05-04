@@ -10,7 +10,7 @@ async function createMessage(id, senderId, receiverId, message) {
       id: id,
       senderId: senderId,
       receiverId: receiverId,
-      timeSent: new Date(),
+      timeSent: new Date().toISOString(),
       message: message
     });
   }catch(err) {

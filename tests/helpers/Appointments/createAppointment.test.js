@@ -14,20 +14,20 @@ afterAll(async() =>{
 });
 describe("creating an appointment", () =>{
   it("should return true", async() =>{
-    const appointment = await createAppointment("1", "pending", new Date(), "home", "2", "1", "2");
+    const appointment = await createAppointment("1", "pending", 123, "home", "2", "1", "2");
     expect(appointment).toEqual(true);
   });
 });
 describe("appointment id already exists", () =>{
   it("should return false", async() =>{
-    await createAppointment("1", "pending", new Date(), "home", "2", "1", "2");
-    const appointment2 = await createAppointment("1", "pending", new Date(), "home", "2", "1", "2");
+    await createAppointment("1", "pending", 213, "home", "2", "1", "2");
+    const appointment2 = await createAppointment("1", "pending", 123, "home", "2", "1", "2");
     expect(appointment2).toEqual(false);
   });
 });
 describe("status is not provided", () =>{
   it("should return false", async() =>{
-    const appointment = await createAppointment("1", new Date(), "home", "2", "1", "2");
+    const appointment = await createAppointment("1", 231, "home", "2", "1", "2");
     expect(appointment).toEqual(false);
   });
 });
