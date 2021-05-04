@@ -18,5 +18,10 @@ describe("The createCourse fn", () => {
     const course = await Courses.findOne({ where: { tutorId: "1", courseName: "algebra" } });
     expect(course).toBeDefined();
     expect(course).not.toBeNull();
+    expect(course.id).toEqual("1");
+    expect(course.tutorId).toEqual("1");
+    expect(course.courseName).toEqual("algebra");
+    expect(course.initialSessionPrice).toEqual(10);
+    expect(course.sessionHourlyRate).toEqual(10);
   });
 });
