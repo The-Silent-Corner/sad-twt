@@ -13,6 +13,9 @@ beforeAll(async() => {
   await createUser("3", "parent@email.com", "1234", "parent");
   parentToken = `user=${await jwtGenerate("3", "parent")}`;
   studentToken = `user=${await jwtGenerate("3", "student")}`;
+  await createCourse("432", "2", "Algebra 2", 100, 12.50);
+  await createCourse("423", "2", "hello AlgebraI", 100, 12.50);
+  await createCourse("244", "2", "pre Algebra 3", 100, 12.50);
 });
  
 afterAll(async() =>{
@@ -38,11 +41,6 @@ describe("GET /api/courses", () =>{
   });
   
   describe("query string does not exist", () => {
-    beforeAll(async() => {
-      await createCourse("432", "2", "Algebra 2", 100, 12.50);
-      await createCourse("423", "2", "hello AlgebraI", 100, 12.50);
-      await createCourse("244", "2", "pre Algebra 3", 100, 12.50);
-    });
     it("should return all of the courses", async() => {
       const res = await request(app)
         .get("/api/courses")
@@ -64,11 +62,6 @@ describe("GET /api/courses", () =>{
     });
   });
   describe("a list of courses that have 'Algebra' in their name", () =>{
-    beforeAll(async() => {
-      await createCourse("1", "2", "Algebra 2", 100, 12.50);
-      await createCourse("2", "2", "hello AlgebraI", 100, 12.50);
-      await createCourse("3", "2", "pre Algebra 3", 100, 12.50);
-    });
     it("should return a list", async() => {
       const res = await request(app)
         .get("/api/courses")
@@ -78,6 +71,7 @@ describe("GET /api/courses", () =>{
         });
       expect(res.body.list).toBeDefined();
       expect(res.body.list).not.toBeNull();
+      expect(res.body.list.length).toEqual(3);
     });
   });
 });
