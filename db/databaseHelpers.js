@@ -3,26 +3,22 @@ const Models = require("./Models");
 
 async function createTables() {
   await db.authenticate();
-  await Models.ParentStudent.sync({ force:true });
-  await Models.Parent.sync({ force: true });
-  await Models.Student.sync({ force: true });
-  await Models.Tutor.sync({ force:true });
-  await Models.Messages.sync({ force:true });
-  await Models.Courses.sync({ force:true });
-  await Models.Appointment.sync({ force: true });
-  await Models.Transactions.sync({ force:true });
+  await Models.StudentParent.sync({ force: true });
+  await Models.Users.sync({ force: true });
+  await Models.Courses.sync({ force: true });
+  await Models.Appointments.sync({ force: true });
+  await Models.Transactions.sync({ force: true });
+  await Models.Messages.sync({ force: true });
 }
 
 module.exports = {
   createTables: createTables,
   wipeDBTables: async() => {
-    await Models.Messages.drop();
     await Models.Transactions.drop();
-    await Models.Appointment.drop();
-    await Models.ParentStudent.drop();
-    await Models.Student.drop();
-    await Models.Parent.drop();
+    await Models.Messages.drop();
+    await Models.Appointments.drop();
     await Models.Courses.drop();
-    await Models.Tutor.drop();
+    await Models.Users.drop();
+    await Models.StudentParent.drop();
   }
 };
