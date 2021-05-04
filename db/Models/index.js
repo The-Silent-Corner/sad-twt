@@ -1,5 +1,5 @@
 const db = require("..");
-const { DataTypes } = require("sequelize");
+const { DataTypes, Sequelize } = require("sequelize");
 
 const Users = db.define("Users", {
   id: {
@@ -57,11 +57,11 @@ const Messages = db.define("Messages", {
   },
   message: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: false,
   },
   timeSent: {
-    type: DataTypes.TIME,
-    allowNull: false
+    type: DataTypes.DATE,
+    allowNull: false,
   },
   senderId: {
     type: DataTypes.STRING,

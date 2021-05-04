@@ -8,12 +8,14 @@ async function createTables() {
   await Models.Courses.sync({ force: true });
   await Models.Appointments.sync({ force: true });
   await Models.Transactions.sync({ force: true });
+  await Models.Messages.sync({ force: true });
 }
 
 module.exports = {
   createTables: createTables,
   wipeDBTables: async() => {
     await Models.Transactions.drop();
+    await Models.Messages.drop();
     await Models.Appointments.drop();
     await Models.Courses.drop();
     await Models.Users.drop();

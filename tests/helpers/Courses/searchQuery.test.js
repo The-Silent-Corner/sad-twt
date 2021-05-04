@@ -2,6 +2,7 @@ const searchQuery = require("../../../helpers/Courses/searchQuery");
 const createCourse = require("../../../helpers/Courses/createCourse");
 const { createTables, wipeDBTables } = require("../../../db/databaseHelpers");
 const createUser = require("../../../helpers/Users/createUser");
+const { serialize } = require("cookie");
 
 beforeAll(async() =>{
   await createTables();
