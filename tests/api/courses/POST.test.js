@@ -46,7 +46,7 @@ describe("POST /api/courses", () =>{
       .set("Cookie", [authCookie]);
     expect(res2.status).toBe(400);
   });
-  test("initial session price is not valid", async() =>{
+  test("initial session price is not in post body", async() =>{
     const res2 = await request(app)
       .post("/api/courses")
       .send({
@@ -57,7 +57,7 @@ describe("POST /api/courses", () =>{
       .set("Cookie", [authCookie]);
     expect(res2.status).toBe(400);
   });
-  test("session hourly rate is not valid", async() =>{
+  test("session hourly rate is not in post body", async() =>{
     const res = await request(app)
       .post("/api/courses")
       .send({
