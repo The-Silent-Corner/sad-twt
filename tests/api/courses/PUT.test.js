@@ -27,8 +27,20 @@ describe("updating a course in database", () =>{
         id: "courseId",
         courseName: "Math"
       });
-    console.log(res);
     expect(res.status).toEqual(200);
     expect(res.body.course.courseName).toEqual("Math");
   });
+});
+describe("id is not in the body", () =>{
+  it("should return 400", async() =>{
+    const res = await request(app)
+      .put("/api/courses")
+      .set("Accept", "application/json")
+      .set("Cookie", [authCookie])
+      .send({
+        courseName: "Math"
+      });
+    expect(res.status).toEqual(400);
+
+  })
 });
