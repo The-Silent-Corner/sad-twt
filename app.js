@@ -41,7 +41,7 @@ app.post("/login", async(req, res) => {
     return res.sendStatus(401);
   }
   const { id: userId, type: userType } = validity;
-  const token = jwtGen(userId, userType); //test token
+  const token = jwtGen(userId, userType); 
   res.cookie("user", token, {
     httpOnly: true,
     maxAge: 3600 * 24 * 1000, // expires 1 day

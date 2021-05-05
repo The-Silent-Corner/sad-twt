@@ -44,3 +44,46 @@ describe("id is not in the body", () =>{
 
   });
 });
+describe("updating only the initialSessionPrice", () =>{
+  it("should update the initialSession price from 10 to 74", async() =>{
+    const res = await request(app)
+      .put("/api/courses")
+      .set("Accept", "application/json")
+      .set("Cookie", [authCookie])
+      .send({
+        id: "courseId",
+        initialSessionPrice: 74
+      });
+    expect(res.body.course.initialSessionPrice).toEqual(74);
+  });
+});
+describe("updating only the sessionHourlyRate", () =>{
+  it("should update the sessionHourlyRate from 20 to 40", async() =>{
+    const res = await request(app)
+      .put("/api/courses")
+      .set("Accept", "application/json")
+      .set("Cookie", [authCookie])
+      .send({
+        id: "courseId",
+        sessionHourlyRate: 40
+      });
+    expect(res.body.course.sessionHourlyRate).toEqual(40);
+  });
+});
+describe("updating every field of a course", () =>{
+  it("should update every field", async() =>{
+    const res = await request(app)
+      .put("/api/courses")
+      .set("Accept", "application/json")
+      .set("Cookie", [authCookie])
+      .send({
+        id: "courseId", 
+        courseName: "Math",
+        initialSessionPrice: 74,
+        sessionHourlyRate: 40
+      });
+    expect(res.body.course.courseName).toEqual("Math");
+    expect(res.body.course.sessionHourlyRate).toEqual(40);
+    expect(res.body.course.initialSessionPrice).toEqual(74);
+  });
+});
