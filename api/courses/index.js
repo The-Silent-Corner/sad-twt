@@ -3,6 +3,7 @@ const createCourse = require("../../helpers/Courses/createCourse");
 const loginMiddleware = require("../../middleware/checkLoggedIn");
 const searchQuery = require("../../helpers/Courses/searchQuery");
 const { Courses } = require("../../db/Models");
+const updateCourse = require("../../helpers/Courses/updateCourse");
 
 router.post("/", loginMiddleware, async(req, res) => {
   let { id, courseName, initialSessionPrice, sessionHourlyRate } = req.body;
@@ -32,4 +33,15 @@ router.get("/", loginMiddleware, async(req, res) => {
   });
   res.end();
 });
+router.put("/", loginMiddleware, async(req, res) =>{
+  const { id } = req.body;
+  if(!id){
+    return res.sendStatus(400);
+  }
+  const course = await updateCourse(req.body);
+  if(!course){
+    return res.sendStatus(500);
+  }
+  return res.status(200).json({course: course});
+} )
 module.exports = router;
