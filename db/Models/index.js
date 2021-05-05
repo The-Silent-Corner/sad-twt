@@ -170,7 +170,7 @@ const Transactions = db.define("Transactions", {
   },
   payer:{
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: true,
     references: {
       model: Users,
       key: "id"
