@@ -42,5 +42,5 @@ describe("id is not in the body", () =>{
       });
     expect(res.status).toEqual(400);
 
-  })
+  });
 });

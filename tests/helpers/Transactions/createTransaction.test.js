@@ -7,30 +7,30 @@ const { TransactionStatus } = require("../../../statusConstants");
 
 beforeAll(async() =>{
   await createTables();
-  await createUser("1", "txiong@", "password", "student");
-  await createUser("2", "tutor@", "password", "tutor");
-  await createCourse("1", "2", "History", 12, 334);
-  await createAppointment("1", "pending", new Date().toISOString(), "campus", "2", "1", "2");
+  await createUser("studentId", "txiong@", "password", "student");
+  await createUser("tutorId", "tutor@", "password", "tutor");
+  await createCourse("courseId", "tutorId", "History", 12, 334);
+  await createAppointment("appId", "pending", new Date().toISOString(), "campus", "courseId", "studentId", "tutorId");
 });
 afterAll(async() =>{
   await wipeDBTables();
 });
 describe("creating a transaction in model", () =>{
   it("should return true", async() =>{
-    const transaction = await createTransaction("1", TransactionStatus.NotPaid, 133234, new Date().toISOString(), "1");
+    const transaction = await createTransaction("transactionId", "studentId", TransactionStatus.NotPaid, 133234, new Date().toISOString(), "appId");
     expect(transaction).toEqual(true);
   });
 });
 describe("transaction id already exists", () =>{
   it("should return false", async() =>{
-    await createTransaction("1", TransactionStatus.Pending, 133234, 234, "1");
-    const transaction2 = await createTransaction("1", TransactionStatus.Paid, 133234, new Date().toISOString(), "1");
+    await createTransaction("transactionId", TransactionStatus.Pending, 133234, 234, "1");
+    const transaction2 = await createTransaction("transactionId", "studentId", TransactionStatus.Paid, 133234, new Date().toISOString(), "appId");
     expect(transaction2).toEqual(false);
   });
 });
 describe("status is not provided", () =>{
   it("should return false", async() =>{
-    const transaction = await createTransaction("1", 133234, new Date().toISOString(), "1");
+    const transaction = await createTransaction("transactionId", "studentId", 133234, new Date().toISOString(), "1");
     expect(transaction).toEqual(false);
   });
 });

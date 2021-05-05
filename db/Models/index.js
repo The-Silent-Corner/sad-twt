@@ -168,6 +168,14 @@ const Transactions = db.define("Transactions", {
     type: DataTypes.STRING,
     allowNull: false
   },
+  payer:{
+    type: DataTypes.STRING,
+    allowNull: false,
+    references: {
+      model: Users,
+      key: "id"
+    }
+  },
   appointmentId: {
     type: DataTypes.STRING,
     allowNull: false,
