@@ -65,8 +65,6 @@ describe("login endpoint test", () =>{
       expect(decoded.user).toEqual("1");
       expect(decoded.type).toEqual("student");
       expect(user).toEqual("user");
-      expect(res.headers["set-cookie"]).toBeDefined();
-      expect(res.headers["set-cookie"]).not.toBeNull();
     });
   });
 });
