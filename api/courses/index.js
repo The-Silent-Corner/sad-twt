@@ -33,15 +33,16 @@ router.get("/", loginMiddleware, async(req, res) => {
   });
   res.end();
 });
+
 router.put("/", loginMiddleware, async(req, res) =>{
   const { id } = req.body;
-  if(!id){
+  if(!id) {
     return res.sendStatus(400);
   }
   const course = await updateCourse(req.body);
-  if(!course){
+  if(!course) {
     return res.sendStatus(500);
   }
-  return res.status(200).json({course: course});
-} )
+  return res.status(200).json({ course: course });
+});
 module.exports = router;

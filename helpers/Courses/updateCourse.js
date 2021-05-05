@@ -1,30 +1,28 @@
 const { Courses, Appointments } = require("../../db/Models");
-const {AppointmentStatus} = require("../../statusConstants");
+const { AppointmentStatus } = require("../../statusConstants");
+const { Op } = require("sequelize");
 
-async function updateCourse(body){
+async function updateCourse(body) {
   const { id, courseName, initialSessionPrice, sessionHourlyRate } = body;
-  const course = await Courses.findOne({where:{id:id}});
+  const course = await Courses.findOne({ where:{ id:id } });
   const appointment = await Appointments.findOne({
-    where:{
+    where: {
       courseId: id,
       status: {
-        [Op.or]:[
-          {status: AppointmentStatus.Ongoing},
-          {status: AppointmentStatus.Pending}
-        ] 
+        [Op.or]:[ AppointmentStatus.Ongoing, AppointmentStatus.Pending ]
       }
     }
   });
-  if(appointment){
+  if(appointment) {
     return false;
   }
-  if(courseName){
+  if(courseName) {
     course.courseName = courseName;
   }
-  if(initialSessionPrice){
+  if(initialSessionPrice) {
     course.initialSessionPrice = initialSessionPrice;
   }
-  if(sessionHourlyRate){
+  if(sessionHourlyRate) {
     course.sessionHourlyRate = sessionHourlyRate;
   }
   await course.save();
