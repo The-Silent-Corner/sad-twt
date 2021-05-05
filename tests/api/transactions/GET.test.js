@@ -23,4 +23,10 @@ beforeAll(async() =>{
 afterAll(async() =>{
   await wipeDBTables();
 });
-describe("");
+describe("GET /api/transactions", () =>{
+  describe("no id in body", () =>{
+    it("should return 400", async() =>{
+
+    });
+  }); 
+});
