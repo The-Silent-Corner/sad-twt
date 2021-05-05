@@ -2,7 +2,7 @@ const request = require("supertest");
 const createUser = require("../helpers/Users/createUser");
 const { createTables, wipeDBTables } = require("../db/databaseHelpers");
 const app = require("../app");
-const jwtVerify = require("../helpers/jwtVerify");
+const cookie = require("cookie");
 
 beforeAll(async() =>{
   await createTables();
@@ -57,14 +57,10 @@ describe("login endpoint test", () =>{
           email: "txiong@",
           password: "password"
         });
-      const cookie = `${res.headers["set-cookie"]}`;
-      const user = cookie.substring(0, 4);
-      const end = cookie.indexOf(";");
-      const payload = cookie.substring(5, end);
-      const decoded = await jwtVerify(payload, process.env.SECRET);
-      expect(decoded.user).toEqual("1");
-      expect(decoded.type).toEqual("student");
-      expect(user).toEqual("user");
+      const token = res.headers["set-cookie"][0];
+      const decoded = cookie.parse(token);
+      expect(decoded.user).toBeDefined();
+      expect(decoded.user).not.toBeNull();
     });
   });
 });
