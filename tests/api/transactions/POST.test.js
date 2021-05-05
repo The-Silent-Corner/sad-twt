@@ -1,7 +1,7 @@
 const request = require("supertest");
 const app = require("../../../app");
 const { createTables, wipeDBTables } = require("../../../db/databaseHelpers.js");
-const { Transactions } = require("../../../db/Models");
+const { Transactions, Appointments } = require("../../../db/Models");
 const jwtGen = require("../../../helpers/jwtGenerate");
 const createUser = require("../../../helpers/Users/createUser");
 const createCourse = require("../../../helpers/Courses/createCourse");
@@ -30,10 +30,7 @@ describe("adding a transactions into the transactions model", () =>{
       .set("Cookie", [authCookie])
       .send({
         id: "tsId",
-        payer: "studentId",
-        status: TransactionStatus.Pending,
         amount: 1000,
-        datePaid: new Date(),
         appointmentId: "appId"
       });
     const transaction = await Transactions.findOne({ where:{ id:"tsId" } });
@@ -45,7 +42,7 @@ describe("adding a transactions into the transactions model", () =>{
     expect(transaction.appointmentId).toEqual("appId");
   });
 });
-describe("status is not in the body", () =>{
+describe("amount is not in the body", () =>{
   it("should return 400", async() =>{
     const res = await request(app)
       .post("/api/transactions")
@@ -53,9 +50,6 @@ describe("status is not in the body", () =>{
       .set("Cookie", [authCookie])
       .send({
         id: "tsId",
-        payer: "studentId",
-        amount: 1000,
-        datePaid: new Date(),
         appointmentId: "appId"
       });
     expect(res.status).toEqual(400);

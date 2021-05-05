@@ -9,7 +9,7 @@ router.post("/", loginMiddleware, async(req, res) =>{
   if(!id || !amount ||  !appointmentId) {
     return res.sendStatus(400);
   }
-  await createTransaction(id, TransactionStatus.NotPaid, amount, new Date(), appointmentId);
+  await createTransaction(id, TransactionStatus.NotPaid, amount, new Date().toISOString(), appointmentId);
   res.end();
 });
 
