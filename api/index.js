@@ -26,5 +26,6 @@ const router = require("express").Router();
  */
 router.use("/courses", require("./courses"));
 router.use("/users", require("./users"));
+router.use("/transactions", require("./transactions"));
 
 module.exports = router;
