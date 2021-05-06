@@ -8,8 +8,6 @@ const createCourse = require("../../../helpers/Courses/createCourse");
 const createAppointment = require("../../../helpers/Appointments/createAppointment");
 const { AppointmentStatus } = require("../../../statusConstants");
 const { TransactionStatus } = require("../../../statusConstants");
-const createTransaction = require("../../../helpers/Transactions/createTransaction");
-const { decode } = require("jsonwebtoken");
 
 let authCookie;
 beforeAll(async() =>{
@@ -26,7 +24,14 @@ afterAll(async() =>{
 describe("GET /api/transactions", () =>{
   describe("no id in body", () =>{
     it("should return 400", async() =>{
-
+      const res = await request(app)
+        .get("/api/transactions")
+        .set("Accept", "application/json")
+        .set("Cookie",[authCookie])
+        .send({
+          id:"dfkj"
+        });
+      expect(res.status).toEqual(400);
     });
   }); 
 });

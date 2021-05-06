@@ -11,7 +11,6 @@ async function createTransaction(id, amount, appointmentId) {
       id: id,
       status: TransactionStatus.NotPaid,
       amount: amount,
-      datePaid: new Date().toISOString(),
       appointmentId: appointmentId
     });
   }catch(err)

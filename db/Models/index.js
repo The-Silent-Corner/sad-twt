@@ -166,7 +166,7 @@ const Transactions = db.define("Transactions", {
   },
   datePaid: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: true
   },
   payer:{
     type: DataTypes.STRING,
