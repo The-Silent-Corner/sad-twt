@@ -2,14 +2,13 @@ const router = require("express").Router();
 const { Transactions } = require("../../db/Models");
 const createTransaction = require("../../helpers/Transactions/createTransaction");
 const loginMiddleware = require("../../middleware/checkLoggedIn");
-const { TransactionStatus } = require("../../statusConstants");
 
 router.post("/", loginMiddleware, async(req, res) =>{
   const { id, amount, appointmentId } = req.body;
-  if(!id || !amount ||  !appointmentId) {
+  if(!id || !amount || !appointmentId) {
     return res.sendStatus(400);
   }
-  await createTransaction(id, TransactionStatus.NotPaid, amount, new Date().toISOString(), appointmentId);
+  await createTransaction(id, amount, appointmentId);
   res.end();
 });
 

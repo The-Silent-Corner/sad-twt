@@ -1,7 +1,7 @@
 const request = require("supertest");
 const app = require("../../../app");
 const { createTables, wipeDBTables } = require("../../../db/databaseHelpers.js");
-const { Transactions, Appointments } = require("../../../db/Models");
+const { Transactions } = require("../../../db/Models");
 const jwtGen = require("../../../helpers/jwtGenerate");
 const createUser = require("../../../helpers/Users/createUser");
 const createCourse = require("../../../helpers/Courses/createCourse");
@@ -36,8 +36,7 @@ describe("adding a transactions into the transactions model", () =>{
     const transaction = await Transactions.findOne({ where:{ id:"tsId" } });
     expect(res.status).toEqual(200);
     expect(transaction.id).toEqual("tsId");
-    expect(transaction.payer).toEqual("studentId");
-    expect(transaction.status).toEqual(TransactionStatus.Pending);
+    expect(transaction.status).toEqual(TransactionStatus.NotPaid);
     expect(transaction.amount).toEqual(1000);
     expect(transaction.appointmentId).toEqual("appId");
   });
