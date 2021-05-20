@@ -3,20 +3,20 @@ const { Op } = require("sequelize");
 
 async function searchQueryTrans(userId) {
   try{
-    const appointment = await Appointments.findAll({
-      where:{
-        [Op.or]:[
-          { tutorId: userId },
-          { studentId: userId }
-        ]
-      }
+    const user = await Transactions.findAll({
+      include:[
+        {
+          model:Appointments,
+          where:{
+            [Op.or]:[
+              { tutorId: userId },
+              { studentId: userId }
+            ]
+          }
+        }
+      ]
     });
-    const transactions = await Transactions.findAll({
-      where:{
-        appointmentId: appointment //need to access id from appointment somehow
-      }
-    });
-    return transactions;
+    return user;
   }catch(err)
   {
     console.log(err);

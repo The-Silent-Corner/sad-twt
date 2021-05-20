@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { Transactions, Appointments } = require("../../db/Models");
+const { Transactions } = require("../../db/Models");
 const createTransaction = require("../../helpers/Transactions/createTransaction");
 const loginMiddleware = require("../../middleware/checkLoggedIn");
 const searchQueryTrans = require("../../helpers/Transactions/searchQueryTrans");
@@ -16,28 +16,18 @@ router.post("/", loginMiddleware, async(req, res) =>{
 
 router.get("/", loginMiddleware, async(req, res) =>{
   // If they want a specific transaction, do this
-  const { id: q } = req.query;
+  const { q } = req.query;
   if(q) {
     const transaction = await Transactions.findOne({ where:{ id:q } });
     if(!transaction) {
-      return res.status(500).json({ message: `unable to find appointment id for transaction ${aptId}` });
+      return res.status(500);
     }
     return res.status(200).json({ transaction });
   }
+  //if they want all transactions that pertain to them
   const { id } = req.user;
-  const appList = await searchQueryTrans(id);  
-  const transaction = await Transactions.findAll({
-    where: {
-      appointmentId: appList.id
-    }
-  });
-  const app = await Appointments.findAll({
-    where:{
-      id: transaction.appointmentId,
-      studentId:q
-    }
-  });
-  res.end();
+  const list = await searchQueryTrans(id);  
+  return res.status(200).json({ list });
 });
 router.put("/", loginMiddleware, async(req, res)=>{
   const { id, status, payer } = req.body;

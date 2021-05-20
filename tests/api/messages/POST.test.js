@@ -5,7 +5,7 @@ const { Messages } = require("../../../db/Models");
 const jwtGen = require("../../../helpers/jwtGenerate");
 const createUser = require("../../../helpers/Users/createUser");
 
-let authCookie
+let authCookie;
 beforeAll(async() =>{
   await createTables();
   await createUser("studentId", "student@email.com", "password", "student");
