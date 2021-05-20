@@ -1,12 +1,11 @@
 const request = require("supertest");
 const app = require("../../../app");
 const { createTables, wipeDBTables } = require("../../../db/databaseHelpers.js");
-const { Transactions } = require("../../../db/Models");
 const jwtGen = require("../../../helpers/jwtGenerate");
 const createUser = require("../../../helpers/Users/createUser");
 const createCourse = require("../../../helpers/Courses/createCourse");
 const createAppointment = require("../../../helpers/Appointments/createAppointment");
-const { TransactionStatus } = require("../../../statusConstants");
+const { AppointmentStatus } = require("../../../statusConstants");
 
 let authCookie;
 beforeAll(async() =>{
@@ -20,36 +19,41 @@ beforeAll(async() =>{
 afterAll(async() =>{
   await wipeDBTables();
 });
-
-describe("adding a transactions into the transactions model", () =>{
-  it("should insert a transaction", async() =>{
+describe("Post /api/appointments", () =>{
+  it("should update the status of an appointment from pending to declined", async()=>{
     const res = await request(app)
-      .post("/api/transactions")
+      .put("/api/appointments")
       .set("Accept", "application/json")
       .set("Cookie", [authCookie])
       .send({
-        id: "tsId",
-        amount: 1000,
-        appointmentId: "appId"
+        id: "appId",
+        status: AppointmentStatus.Declined
       });
-    const transaction = await Transactions.findOne({ where:{ id:"tsId" } });
     expect(res.status).toEqual(200);
-    expect(transaction.id).toEqual("tsId");
-    expect(transaction.status).toEqual(TransactionStatus.NotPaid);
-    expect(transaction.amount).toEqual(1000);
-    expect(transaction.appointmentId).toEqual("appId");
+    expect(res.body.app.status).toEqual("declined");
   });
-});
-describe("amount is not in the body", () =>{
-  it("should return 400", async() =>{
-    const res = await request(app)
-      .post("/api/transactions")
-      .set("Accept", "application/json")
-      .set("Cookie", [authCookie])
-      .send({
-        id: "tsId",
-        appointmentId: "appId"
-      });
-    expect(res.status).toEqual(400);
+  describe("id is not in the body", () =>{
+    it("should return 400", async() =>{
+      const res = await request(app)
+        .put("/api/appointments")
+        .set("Accept", "application/json")
+        .set("Cookie", [authCookie])
+        .send({
+          status: AppointmentStatus.Declined
+        });
+      expect(res.status).toEqual(400);
+    });
+  });
+  describe("status is not in the body", () =>{
+    it("should return 400", async() =>{
+      const res = await request(app)
+        .put("/api/appointments")
+        .set("Accept", "application/json")
+        .set("Cookie", [authCookie])
+        .send({
+          id: "appId"
+        });
+      expect(res.status).toEqual(400);
+    });
   });
 });

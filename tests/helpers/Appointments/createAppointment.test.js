@@ -2,7 +2,6 @@ const createAppointment = require("../../../helpers/Appointments/createAppointme
 const { createTables, wipeDBTables } = require("../../../db/databaseHelpers");
 const createUser = require("../../../helpers/Users/createUser");
 const createCourse = require("../../../helpers/Courses/createCourse");
-const { AppointmentStatus } = require("../../../statusConstants");
 
 beforeAll(async() =>{
   await createTables();
@@ -15,20 +14,20 @@ afterAll(async() =>{
 });
 describe("creating an appointment", () =>{
   it("should return true", async() =>{
-    const appointment = await createAppointment("appId", AppointmentStatus.Pending, new Date().toISOString(), "home", "courseId", "studentId", "tutorId");
+    const appointment = await createAppointment("appId", "home", "courseId", "studentId", "tutorId");
     expect(appointment).toEqual(true);
   });
 });
 describe("appointment id already exists", () =>{
   it("should return false", async() =>{
-    await createAppointment("appId", AppointmentStatus.Accepted, new Date().toISOString(), "home", "courseId", "studentId", "tutorId");
-    const appointment2 = await createAppointment("appId", AppointmentStatus.Declined, new Date().toISOString(), "home", "courseId", "studentId", "tutorId");
+    await createAppointment("appId", "home", "courseId", "studentId", "tutorId");
+    const appointment2 = await createAppointment("appId", "home", "courseId", "studentId", "tutorId");
     expect(appointment2).toEqual(false);
   });
 });
-describe("status is not provided", () =>{
+describe("location is not provided", () =>{
   it("should return false", async() =>{
-    const appointment = await createAppointment("appId", new Date().toISOString(), "home", "courseId", "studentId", "tutorId");
+    const appointment = await createAppointment("appId", "courseId", "studentId", "tutorId");
     expect(appointment).toEqual(false);
   });
 });

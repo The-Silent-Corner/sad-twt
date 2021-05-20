@@ -9,7 +9,7 @@ beforeAll(async() =>{
   await createUser("studentId", "txiong@", "password", "student");
   await createUser("tutorId", "tutor@", "password", "tutor");
   await createCourse("courseId", "tutorId", "History", 12, 334);
-  await createAppointment("appId", "pending", new Date().toISOString(), "campus", "courseId", "studentId", "tutorId");
+  await createAppointment("appId", "campus", "courseId", "studentId", "tutorId");
 });
 afterAll(async() =>{
   await wipeDBTables();

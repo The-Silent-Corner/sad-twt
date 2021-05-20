@@ -1,6 +1,7 @@
 const { Appointments } = require("../../db/Models");
+const { AppointmentStatus } = require("../../statusConstants");
 
-async function createAppointment(id, status, time, location, courseId, studentId, tutorId) {
+async function createAppointment(id, location, courseId, studentId, tutorId) {
   const appointment = await Appointments.findOne({ where:{ id:id } });
   if(appointment) {
     return false;
@@ -8,8 +9,8 @@ async function createAppointment(id, status, time, location, courseId, studentId
   try{
     await Appointments.create({
       id: id,
-      status: status,
-      time: time,
+      status: AppointmentStatus.Pending,
+      time: new Date().toISOString(),
       location: location,
       courseId: courseId,
       studentId: studentId,
