@@ -13,6 +13,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors({ origin:"http://localhost:3000", credentials: true }));
 app.use(cookieParser(process.env.SECRET));
+
+if (process.env.NODE_ENV === "development") {
+  app.use((req, res, next) => setTimeout(next, 300));
+}
+
 /**
  * Define your routes below, or pass them around to an Express router.
  */
@@ -45,7 +50,7 @@ app.post("/login", async(req, res) => {
   res.cookie("user", token, {
     httpOnly: true,
     maxAge: 3600 * 24 * 1000, // expires 1 day
-    sameSite: "lax",
+    sameSite: "strict",
     secure: process.env.NODE_ENV === "production"
   });
   res.end();
