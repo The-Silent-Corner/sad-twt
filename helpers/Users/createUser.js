@@ -4,7 +4,10 @@ const bcrypt = require("bcrypt");
 async function createUser(id, email, password, type) {
   const user = await Users.findOne({ where:{ email: email } });
   if(user) {
-    return false;
+    throw {
+      statusCode: 409,
+      message: "User already exists."
+    };
   }
   const hashedPassword = await bcrypt.hash(password, 10);
   try {
@@ -15,7 +18,11 @@ async function createUser(id, email, password, type) {
       type: type
     });
   } catch(err) {
-    return false;
+    throw {
+      statusCode: 500,
+      message: "ORM tool failed",
+      details: err
+    };
   }
 }
 
