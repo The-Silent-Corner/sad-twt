@@ -5,8 +5,11 @@ const createUser = require("../../../helpers/Users/createUser");
 const { Users } = require("../../../db/Models");
 const dbHelpers = require("../../../db/databaseHelpers");
 
+const mockUser = { id: 1, email: "user@email.com", password: "123123", type: "student" };
+
 beforeAll(async() => {
   await dbHelpers.createTables();
+  await createUser(mockUser);
 });
 
 afterAll(async() => {
@@ -25,8 +28,7 @@ describe("POST /api/users", () => {
   describe("when a JWT token is present", () => {
     describe("if the JWT is valid", () => {
       it("updates the user", async() => {
-        await createUser("1", "user@email.com", "123", "student");
-        const token = jwtGenerate("1", "student");
+        const token = jwtGenerate(mockUser.id, mockUser.type);
         const res = await request(app)
           .put("/api/users")
           .set("Accept", "application/json")
@@ -44,7 +46,6 @@ describe("POST /api/users", () => {
   });
   describe("first name is not provided", () =>{
     it("should return 400", async() =>{
-      await createUser("1", "user@email.com", "123", "student");
       const token = jwtGenerate("1", "student");
       const res = await request(app)
         .put("/api/users")
@@ -58,7 +59,6 @@ describe("POST /api/users", () => {
   });
   describe("last name is not provided", () =>{
     it("should return 400", async() =>{
-      await createUser("1", "user@email.com", "123", "student");
       const token = jwtGenerate("1", "student");
       const res = await request(app)
         .put("/api/users")

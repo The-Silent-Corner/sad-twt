@@ -22,10 +22,6 @@ const Users = db.define("Users", {
   password: {
     type: DataTypes.STRING,
     allowNull: false
-  },
-  type: {
-    type: DataTypes.STRING,
-    allowNull: false
   }
 });
 

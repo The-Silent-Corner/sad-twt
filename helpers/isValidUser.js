@@ -10,18 +10,20 @@ async function isValidUser(email, password) {
   let user;
   try {
     user = await Users.findOne({ where: { email: email } });
-    if(!user) {
-      return false;
-    }
   } catch(err) {
-    return {
-      message: "Querying Users table failed",
-      stackTrace: err
+    throw {
+      statusCode: 500,
+      message: "ORM tool failed while trying to query user."
     };
   }
+  const errs = {
+    statusCode: 401,
+    message: "invalid credentials"
+  };
+  if(!user) throw errs;
   const res = await bcrypt.compare(password, user.password);
   if(!res) {
-    return false;
+    throw errs;
   }
   return { type: user.type, id: user.id };
 }

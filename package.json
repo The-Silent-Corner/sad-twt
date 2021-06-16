@@ -4,10 +4,10 @@
   "description": "A template to use for quickly starting with ExpressJS.",
   "main": "index.js",
   "scripts": {
-    "start": "node .",
+    "start": "node cross-env NODE_ENV=development .",
     "test": "jest",
     "lint": "eslint .",
-    "dev": "nodemon .",
+    "dev": "cross-env NODE_ENV=development nodemon .",
     "migrate": "node ./db/__migrateDb__.js"
   },
   "repository": {
@@ -33,6 +33,7 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
+    "cross-env": "^7.0.3",
     "eslint": "^7.21.0",
     "eslint-plugin-jest": "^24.1.5",
     "jest": "^26.6.3",

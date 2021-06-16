@@ -11,7 +11,7 @@ const jwtGen = require("./helpers/jwtGenerate");
  */
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cors({ origin:"http://localhost:3000", credentials: true }));
+app.use(cors());
 app.use(cookieParser(process.env.SECRET));
 
 if (process.env.NODE_ENV === "development") {
@@ -30,29 +30,32 @@ app.get("/logout", async(req, res) => {
   res.redirect("/");
 });
 
-app.post("/login", async(req, res) => {
+app.post("/api/getAuth", async(req, res) => {
   const { email, password } = req.body;
   if(!email || !password) {
-    return res.status(400).json({ message: "INVALID_BODY" });
+    return res.status(400).json({ message: "Invalid request body." });
   }
-  const validity = await isValidUser(email, password);
-  if(!validity) {
-    const { stackTrace, message } = validity;
-    if(stackTrace && message) {
-      console.error(message);
-      console.error(stackTrace);
-      return res.sendStatus(500);
-    }
-    return res.sendStatus(401);
+  let validity;
+  try {
+    validity = await isValidUser(email, password);
+  } catch(err) {
+    return res.status(err.statusCode).json({ message: err.message });
   }
+  const iat = 86400000; // 1 day in ms
   const { id: userId, type: userType } = validity;
-  const token = jwtGen(userId, userType); //test token
+  const token = jwtGen(userId, userType);
   res.cookie("user", token, {
     httpOnly: true,
-    maxAge: 3600 * 24 * 1000, // expires 1 day
+    maxAge: iat, // expires 1 day
     sameSite: "strict",
     secure: process.env.NODE_ENV === "production"
   });
+  res.json({ iat: iat });
+});
+
+app.post("/logout", async(req, res) => {
+  res.clearCookie("user");
   res.end();
 });
+
 module.exports = app;
