@@ -189,7 +189,6 @@ const Transactions = db.define("Transactions", {
 //Relationships
 Transactions.belongsTo(Appointments, { foreignKey:"appointmentId" });
 Appointments.belongsTo(Transactions, { foreignKey:"transactionId" });
-
 module.exports = {
   Users: Users,
   StudentParent: StudentParent,

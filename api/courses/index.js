@@ -29,6 +29,9 @@ router.get("/", loginMiddleware, async(req, res) => {
     return res.sendStatus(400);
   }
   const list = await searchQuery(q);
+  if(list.length === 0) {
+    return res.sendStatus(500);
+  }
   res.json({
     list: list
   });

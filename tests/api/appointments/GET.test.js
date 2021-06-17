@@ -29,8 +29,8 @@ describe("GET /api/appointments", () =>{
         .get("/api/appointments")
         .set("Accept", "application/json")
         .set("Cookie", [authCookie])
-        .send({
-          id: "studentId"
+        .query({
+          q: "studentId"
         });
       expect(res.status).toEqual(200);
       expect(res.body.length).toEqual(1);
@@ -42,8 +42,8 @@ describe("GET /api/appointments", () =>{
         .get("/api/appointments")
         .set("Accept", "application/json")
         .set("Cookie", [authCookie])
-        .send({
-          id: "foobar"
+        .query({
+          q: "foobar"
         });
       expect(res.body.length).toEqual(2);
       expect(res.status).toEqual(200);
@@ -55,8 +55,8 @@ describe("GET /api/appointments", () =>{
         .get("/api/appointments")
         .set("Accept", "application/json")
         .set("Cookie", [authCookie])
-        .send({
-          id: "foobar"
+        .query({
+          q: "foobar"
         });
       expect(res.body.length).toEqual(2);
       expect(res.status).toEqual(200);
@@ -68,14 +68,14 @@ describe("GET /api/appointments", () =>{
         .get("/api/appointments")
         .set("Accept", "application/json")
         .set("Cookie", [authCookie])
-        .send({
-          id: "tutorId"
+        .query({
+          q: "tutorId"
         });
       expect(res.body.length).toEqual(3);
       expect(res.status).toEqual(200);
     });
   });
-  describe("userId is provided not in body", ()=>{
+  describe("userId is provided not in query", ()=>{
     it("should return 400", async() =>{
       const res = await request(app)
         .get("/api/appointments")

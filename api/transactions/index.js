@@ -20,14 +20,18 @@ router.get("/", loginMiddleware, async(req, res) =>{
   if(q) {
     const transaction = await Transactions.findOne({ where:{ id:q } });
     if(!transaction) {
-      return res.status(500);
+      return res.sendStatus(404);
     }
     return res.status(200).json({ transaction });
   }
   //if they want all transactions that pertain to them
   const { id } = req.user;
-  const list = await searchQueryTrans(id);  
+  const list = await searchQueryTrans(id); 
+  if(list.length === 0) {
+    return res.sendStatus(500);
+  }
   return res.status(200).json({ list });
+  
 });
 router.put("/", loginMiddleware, async(req, res)=>{
   const { id, status, payer } = req.body;

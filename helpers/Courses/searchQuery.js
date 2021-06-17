@@ -2,13 +2,17 @@ const { Courses } = require("../../db/Models");
 const { Op } = require("sequelize");
 
 async function searchQuery(course) {
-  const list = await Courses.findAll({
-    where:{
-      courseName: {
-        [Op.like]: `%${course}%`
+  try{
+    const list = await Courses.findAll({
+      where:{
+        courseName: {
+          [Op.like]: `%${course}%`
+        }
       }
-    }
-  });
-  return list;
+    });
+    return list;
+  }catch(err) {
+    return false;
+  }
 }
 module.exports = searchQuery;
