@@ -22,7 +22,7 @@ if (process.env.NODE_ENV === "development") {
  * Define your routes below, or pass them around to an Express router.
  */
 app.use("/api", require("./api"));
-app.get("/", async(req, res) => {
+app.get("/api", async(req, res) => {
   res.json({ message: "welcome to our api!" });
 });
 app.get("/logout", async(req, res) => {
