@@ -15,7 +15,7 @@ app.use(cors());
 app.use(cookieParser(process.env.SECRET));
 
 if (process.env.NODE_ENV === "development") {
-  app.use((req, res, next) => setTimeout(next, 300));
+  app.use((req, res, next) => setTimeout(next, process.env.MOCK_DELAY));
 }
 
 /**
