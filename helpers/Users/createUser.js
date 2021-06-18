@@ -1,7 +1,7 @@
 const { Users } = require("../../db/Models");
 const bcrypt = require("bcrypt");
 
-async function createUser(id, email, password) {
+async function createUser(id, email, password, firstName, lastName) {
   const user = await Users.findOne({ where:{ email: email } });
   if(user) {
     throw {
@@ -14,7 +14,9 @@ async function createUser(id, email, password) {
     await Users.create({
       id: id,
       email: email,
-      password: hashedPassword
+      password: hashedPassword,
+      firstName: firstName,
+      lastName: lastName
     });
   } catch(err) {
     throw {

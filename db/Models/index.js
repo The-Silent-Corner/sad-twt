@@ -8,11 +8,11 @@ const Users = db.define("Users", {
   },
   firstName: {
     type: DataTypes.STRING,
-    allowNull: true
+    allowNull: false
   },
   lastName: {
     type: DataTypes.STRING,
-    allowNull: true
+    allowNull: false
   },
   email: {
     type: DataTypes.STRING,

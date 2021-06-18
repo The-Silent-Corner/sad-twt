@@ -5,13 +5,13 @@ const UpdateUser = require("../../helpers/Users/updateUsers");
 const loginMiddleware = require("../../middleware/checkLoggedIn");
 
 router.post("/", async(req, res) =>{
-  const { email, password1, password2 } = req.body;
-  if(!email || !password1 || !password2 ) { return res.sendStatus(400).json({ message: "invalid request body" }); }
+  const { email, password1, password2, firstName, lastName } = req.body;
+  if(!email || !password1 || !password2 || !firstName || !lastName) { return res.sendStatus(400).json({ message: "invalid request body" }); }
   if(password1 !== password2) {
     return res.sendStatus(400);
   }
   try {
-    await createUser(v4(), email, password1);
+    await createUser(v4(), email, password1, firstName, lastName);
   } catch(err) {
     console.log(err.message);
     return res.status(err.statusCode).json(err);

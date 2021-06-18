@@ -7,7 +7,7 @@ module.exports = async function(req, res, next) {
   let decoded;
   try {
     decoded = await jwtVerify(user);
-    req.user = { id: decoded.user, type: decoded.type };
+    req.user = { id: decoded.user };
     return next();
   } catch(err) {
     return res.status(401).json({ message: "jwt token validation failed" });

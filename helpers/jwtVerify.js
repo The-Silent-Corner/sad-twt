@@ -6,7 +6,7 @@ async function jwtVerify(token) {
     return await jwt.verify(token, process.env.SECRET);
   }catch(err)
   {
-    return false;
+    throw false;
   }
 }
 module.exports = jwtVerify;
