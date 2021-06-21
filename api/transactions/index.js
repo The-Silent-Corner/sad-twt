@@ -44,10 +44,11 @@ router.put("/", loginMiddleware, async(req, res)=>{
   if(!id || !status || !payer) {
     return res.sendStatus(400);
   }
-  const trans = await updateTransaction(id, status, payer);
-  if(!trans) {
-    return res.sendStatus(500);
+  try {
+    await updateTransaction(id, status, payer);
+    return res.sendStatus(204);
+  } catch(err) {
+    res.status(err.statusCode).json({ message: err.message });
   }
-  return res.status(200).json({ trans });
 });
 module.exports = router;
