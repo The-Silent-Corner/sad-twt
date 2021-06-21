@@ -8,14 +8,18 @@ const jwtGenerate = require("../../../helpers/jwtGenerate");
 let parentToken, studentToken;
 beforeAll(async() => {
   await createTables();
-  await createUser("1", "student@email.com", "1234", "student");
-  await createUser("2", "tutor@email.com", "1234", "tutor");
-  await createUser("3", "parent@email.com", "1234", "parent");
-  parentToken = `user=${await jwtGenerate("3", "parent")}`;
-  studentToken = `user=${await jwtGenerate("3", "student")}`;
-  await createCourse("432", "2", "Algebra 2", 100, 12.50);
-  await createCourse("423", "2", "hello AlgebraI", 100, 12.50);
-  await createCourse("244", "2", "pre Algebra 3", 100, 12.50);
+  try {
+    await createUser("1", "student@email.com", "1234", "student");
+    await createUser("2", "tutor@email.com", "1234", "tutor");
+    await createUser("3", "parent@email.com", "1234", "parent");
+    parentToken = `user=${await jwtGenerate("3", "parent")}`;
+    studentToken = `user=${await jwtGenerate("3", "student")}`;
+    await createCourse("432", "2", "Algebra 2", 100, 12.50);
+    await createCourse("423", "2", "hello AlgebraI", 100, 12.50);
+    await createCourse("244", "2", "pre Algebra 3", 100, 12.50);
+  } catch(err) {
+    throw console.error("Setting up tests failed for courses GET");
+  }
 });
  
 afterAll(async() =>{
