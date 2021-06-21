@@ -35,10 +35,16 @@ router.get("/", loginMiddleware, async(req, res) =>{
   if(!q) {
     return res.sendStatus(400);
   }
-  const app = await searchQueryApp(q);
-  if(app.length === 0) {
-    return res.sendStatus(500);
+  try {
+    const app = await searchQueryApp(q);
+
+    // If an empty array is returned => no courses matching the string
+    if(app.length === 0) {
+      return res.sendStatus(404);
+    }
+    return res.status(200).json(app);
+  } catch(err) {
+    return res.status(err.statusCode).json({ message: err.message });
   }
-  return res.status(200).json(app);
 });
 module.exports = router;

@@ -13,7 +13,10 @@ async function searchQueryApp(userId) {
     return list;
   }catch(err) {
     console.log(err);
-    return false;
+    throw {
+      statusCode: 500,
+      message: "orm tool failed"
+    };
   }
 }
 module.exports = searchQueryApp;
