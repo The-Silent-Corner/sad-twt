@@ -33,21 +33,7 @@ describe("DELETE /api/courses", ()=>{
         });
       const course = await Courses.findOne({ where:{ id:"courseId" } });
       expect(course).toBeNull();
-      expect(res.status).toEqual(200);
-    });
-  });
-  describe("deleting a course in model with tutorId in body", () =>{
-    it("should delete the course with 'foobar' as its tutorId", async() =>{
-      const res = await request(app)
-        .delete("/api/courses")
-        .set("Accept", "application/json")
-        .set("Cookie", [authCookie])
-        .send({
-          tutorId: "foobar"
-        });
-      const course = await Courses.findOne({ where:{ tutorId:"foobar" } });
-      expect(course).toBeNull();
-      expect(res.status).toEqual(200);
+      expect(res.status).toEqual(204);
     });
   });
   describe("there is nothing in the body", () =>{
