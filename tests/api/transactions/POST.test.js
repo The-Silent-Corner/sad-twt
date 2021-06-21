@@ -28,16 +28,10 @@ describe("adding a transactions into the transactions model", () =>{
       .set("Accept", "application/json")
       .set("Cookie", [authCookie])
       .send({
-        id: "tsId",
         amount: 1000,
         appointmentId: "appId"
       });
-    const transaction = await Transactions.findOne({ where:{ id:"tsId" } });
-    expect(res.status).toEqual(200);
-    expect(transaction.id).toEqual("tsId");
-    expect(transaction.status).toEqual(TransactionStatus.NotPaid);
-    expect(transaction.amount).toEqual(1000);
-    expect(transaction.appointmentId).toEqual("appId");
+    expect(res.status).toEqual(201);
   });
 });
 describe("amount is not in the body", () =>{
@@ -47,7 +41,6 @@ describe("amount is not in the body", () =>{
       .set("Accept", "application/json")
       .set("Cookie", [authCookie])
       .send({
-        id: "tsId",
         appointmentId: "appId"
       });
     expect(res.status).toEqual(400);

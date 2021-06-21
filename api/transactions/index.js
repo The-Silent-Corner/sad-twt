@@ -4,14 +4,20 @@ const createTransaction = require("../../helpers/Transactions/createTransaction"
 const loginMiddleware = require("../../middleware/checkLoggedIn");
 const searchQueryTrans = require("../../helpers/Transactions/searchQueryTrans");
 const updateTransaction = require("../../helpers/Transactions/updateTransaction");
+const { v4 } = require("uuid");
 
 router.post("/", loginMiddleware, async(req, res) =>{
-  const { id, amount, appointmentId } = req.body;
-  if(!id || !amount || !appointmentId) {
+  const id = v4();
+  const { amount, appointmentId } = req.body;
+  if(!amount || !appointmentId) {
     return res.sendStatus(400);
   }
-  await createTransaction(id, amount, appointmentId);
-  res.end();
+  try {
+    await createTransaction(id, amount, appointmentId);
+  } catch(err) {
+    res.status(err.status).json({ message: err.message });
+  }
+  res.status(201).end();
 });
 
 router.get("/", loginMiddleware, async(req, res) =>{
