@@ -1,6 +1,7 @@
 const { Transactions } = require("../../db/Models");
+const { TransactionStatus } = require("../../statusConstants");
 
-async function createTransaction(id, status, amount, datePaid, appointmentId) {
+async function createTransaction(id, amount, appointmentId) {
   const transaction = await Transactions.findOne({ where:{ id:id } });
   if(transaction) {
     return false;
@@ -8,9 +9,8 @@ async function createTransaction(id, status, amount, datePaid, appointmentId) {
   try{
     await Transactions.create({
       id: id,
-      status: status,
+      status: TransactionStatus.NotPaid,
       amount: amount,
-      datePaid: datePaid,
       appointmentId: appointmentId
     });
   }catch(err)

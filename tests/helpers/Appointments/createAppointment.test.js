@@ -2,33 +2,32 @@ const createAppointment = require("../../../helpers/Appointments/createAppointme
 const { createTables, wipeDBTables } = require("../../../db/databaseHelpers");
 const createUser = require("../../../helpers/Users/createUser");
 const createCourse = require("../../../helpers/Courses/createCourse");
-const { AppointmentStatus } = require("../../../statusConstants");
 
 beforeAll(async() =>{
   await createTables();
-  await createUser("1", "student@email.com", "password", "student");
-  await createUser("2", "tutor@email.com", "password", "tutor");
-  await createCourse("1", "2", "Algebra", 12, 20);
+  await createUser("studentId", "student@email.com", "password", "student");
+  await createUser("tutorId", "tutor@email.com", "password", "tutor");
+  await createCourse("courseId", "tutorId", "Algebra", 12, 20);
 });
 afterAll(async() =>{
   await wipeDBTables();
 });
 describe("creating an appointment", () =>{
   it("should return true", async() =>{
-    const appointment = await createAppointment("1", AppointmentStatus.Pending, 123, "home", "2", "1", "2");
+    const appointment = await createAppointment("appId", "home", "courseId", "studentId", "tutorId");
     expect(appointment).toEqual(true);
   });
 });
 describe("appointment id already exists", () =>{
   it("should return false", async() =>{
-    await createAppointment("1", AppointmentStatus.Accepted, 213, "home", "2", "1", "2");
-    const appointment2 = await createAppointment("1", AppointmentStatus.Declined, 123, "home", "2", "1", "2");
+    await createAppointment("appId", "home", "courseId", "studentId", "tutorId");
+    const appointment2 = await createAppointment("appId", "home", "courseId", "studentId", "tutorId");
     expect(appointment2).toEqual(false);
   });
 });
-describe("status is not provided", () =>{
+describe("location is not provided", () =>{
   it("should return false", async() =>{
-    const appointment = await createAppointment("1", 231, "home", "2", "1", "2");
+    const appointment = await createAppointment("appId", "courseId", "studentId", "tutorId");
     expect(appointment).toEqual(false);
   });
 });

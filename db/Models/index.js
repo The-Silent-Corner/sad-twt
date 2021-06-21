@@ -166,7 +166,15 @@ const Transactions = db.define("Transactions", {
   },
   datePaid: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: true
+  },
+  payer:{
+    type: DataTypes.STRING,
+    allowNull: true,
+    references: {
+      model: Users,
+      key: "id"
+    }
   },
   appointmentId: {
     type: DataTypes.STRING,
@@ -178,6 +186,9 @@ const Transactions = db.define("Transactions", {
   }
 });
 
+//Relationships
+Transactions.belongsTo(Appointments, { foreignKey:"appointmentId" });
+Appointments.belongsTo(Transactions, { foreignKey:"transactionId" });
 module.exports = {
   Users: Users,
   StudentParent: StudentParent,

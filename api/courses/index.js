@@ -3,6 +3,8 @@ const createCourse = require("../../helpers/Courses/createCourse");
 const loginMiddleware = require("../../middleware/checkLoggedIn");
 const searchQuery = require("../../helpers/Courses/searchQuery");
 const { Courses } = require("../../db/Models");
+const updateCourse = require("../../helpers/Courses/updateCourse");
+const deleteCourse = require("../../helpers/Courses/deleteCourse");
 
 router.post("/", loginMiddleware, async(req, res) => {
   let { id, courseName, initialSessionPrice, sessionHourlyRate } = req.body;
@@ -27,9 +29,35 @@ router.get("/", loginMiddleware, async(req, res) => {
     return res.sendStatus(400);
   }
   const list = await searchQuery(q);
+  if(list.length === 0) {
+    return res.sendStatus(500);
+  }
   res.json({
     list: list
   });
   res.end();
+});
+
+router.put("/", loginMiddleware, async(req, res) =>{
+  const { id } = req.body;
+  if(!id) {
+    return res.sendStatus(400);
+  }
+  const course = await updateCourse(req.body);
+  if(!course) {
+    return res.sendStatus(500);
+  }
+  return res.status(200).json({ course: course });
+});
+router.delete("/", loginMiddleware, async(req, res)=>{
+  const { courseId, tutorId } = req.body;
+  if(!courseId && !tutorId) {
+    return res.sendStatus(400);
+  }
+  const course = await deleteCourse(courseId, tutorId);
+  if(!course) {
+    return res.sendStatus(500);
+  }
+  return res.sendStatus(200);
 });
 module.exports = router;

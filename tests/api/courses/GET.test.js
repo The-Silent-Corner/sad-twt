@@ -51,7 +51,7 @@ describe("GET /api/courses", () =>{
     });
   });
   describe("query string is less than 3 characters", () => {
-    it("shoudld return 400", async() => {
+    it("should return 400", async() => {
       const res = await request(app)
         .get("/api/courses")
         .set("Cookie", [studentToken])
