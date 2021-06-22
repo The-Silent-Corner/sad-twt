@@ -4,14 +4,20 @@ const createTransaction = require("../../helpers/Transactions/createTransaction"
 const loginMiddleware = require("../../middleware/checkLoggedIn");
 const searchQueryTrans = require("../../helpers/Transactions/searchQueryTrans");
 const updateTransaction = require("../../helpers/Transactions/updateTransaction");
+const { v4 } = require("uuid");
 
 router.post("/", loginMiddleware, async(req, res) =>{
-  const { id, amount, appointmentId } = req.body;
-  if(!id || !amount || !appointmentId) {
+  const id = v4();
+  const { amount, appointmentId } = req.body;
+  if(!amount || !appointmentId) {
     return res.sendStatus(400);
   }
-  await createTransaction(id, amount, appointmentId);
-  res.end();
+  try {
+    await createTransaction(id, amount, appointmentId);
+  } catch(err) {
+    res.status(err.status).json({ message: err.message });
+  }
+  res.status(201).end();
 });
 
 router.get("/", loginMiddleware, async(req, res) =>{
@@ -38,10 +44,11 @@ router.put("/", loginMiddleware, async(req, res)=>{
   if(!id || !status || !payer) {
     return res.sendStatus(400);
   }
-  const trans = await updateTransaction(id, status, payer);
-  if(!trans) {
-    return res.sendStatus(500);
+  try {
+    await updateTransaction(id, status, payer);
+    return res.sendStatus(204);
+  } catch(err) {
+    res.status(err.statusCode).json({ message: err.message });
   }
-  return res.status(200).json({ trans });
 });
 module.exports = router;

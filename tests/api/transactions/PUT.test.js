@@ -31,9 +31,7 @@ describe("PUT /api/transactions", () =>{
         status: "pending",
         payer: "studentId"
       });
-    expect(res.status).toEqual(200);
-    expect(res.body.trans.status).toEqual("pending");
-    expect(res.body.trans.payer).toEqual("studentId");
+    expect(res.status).toEqual(204);
   });
   describe("id is not in body", () =>{
     it("should return 400", async() =>{
@@ -72,6 +70,21 @@ describe("PUT /api/transactions", () =>{
           status: "pending"
         });
       expect(res.status).toEqual(400);
+    });
+  });
+  describe("no id found", () => {
+    it("should return 404", async() => {
+      const res = await request(app)
+        .put("/api/transactions")
+        .set("Accept", "application/json")
+        .set("Cookie", [authCookie])
+        .send({
+          id: "verybadid",
+          status: "pending",
+          payer: "studentId"
+        });
+      expect(res.status).toEqual(404);
+      expect(res.body.message).toEqual("transaction id not found");
     });
   });
 });

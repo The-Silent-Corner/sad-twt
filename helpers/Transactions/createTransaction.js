@@ -4,7 +4,10 @@ const { TransactionStatus } = require("../../statusConstants");
 async function createTransaction(id, amount, appointmentId) {
   const transaction = await Transactions.findOne({ where:{ id:id } });
   if(transaction) {
-    return false;
+    throw {
+      statusCode: 409,
+      message: "transaction already exists"
+    };
   }
   try{
     await Transactions.create({
@@ -13,9 +16,11 @@ async function createTransaction(id, amount, appointmentId) {
       amount: amount,
       appointmentId: appointmentId
     });
-  }catch(err)
-  {
-    return false;
+  } catch(err) {
+    throw {
+      statusCode: 500,
+      message: "orm tool failed"
+    };
   }
   return true;
 }

@@ -4,14 +4,18 @@ async function updateAppointment(id, status) {
   try{
     const app = await Appointments.findOne({ where:{ id:id } });
     if(!app) {
-      return false;
+      throw {
+        statusCode: 404,
+        message: "appointment not found"
+      };
     }
     app.status = status;
-    app.save();
-    return app;
-  }catch(err) {
-    console.log(err);
-    return false;
+    await app.save();
+  } catch(err) {
+    throw {
+      statusCode: 500,
+      message: "orm tool failed"
+    };
   }
 }
 module.exports = updateAppointment;
