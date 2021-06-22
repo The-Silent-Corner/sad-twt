@@ -30,6 +30,7 @@ describe("Post /api/appointments", () =>{
         status: AppointmentStatus.Declined
       });
     expect(res.status).toEqual(204);
+
   });
   describe("id is not in the body", () =>{
     it("should return 400", async() =>{
