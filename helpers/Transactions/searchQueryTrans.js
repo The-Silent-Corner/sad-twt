@@ -19,8 +19,10 @@ async function searchQueryTrans(userId) {
     return user;
   }catch(err)
   {
-    console.log(err);
-    return false;
+    throw {
+      statusCode: 500,
+      message: "orm tool failed"
+    };
   }
 }
 module.exports = searchQueryTrans;

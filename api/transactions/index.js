@@ -31,7 +31,6 @@ router.get("/", loginMiddleware, async(req, res) =>{
     return res.sendStatus(500);
   }
   return res.status(200).json({ list });
-  
 });
 router.put("/", loginMiddleware, async(req, res)=>{
   const { id, status, payer } = req.body;

@@ -6,6 +6,7 @@ const createUser = require("../../../helpers/Users/createUser");
 const createCourse = require("../../../helpers/Courses/createCourse");
 const createAppointment = require("../../../helpers/Appointments/createAppointment");
 const createTransaction = require("../../../helpers/Transactions/createTransaction");
+const searchQueryTrans = require("../../../helpers/Transactions/searchQueryTrans");
 
 let studentIdCookie, tutorIdCookie, foobarCookie;
 beforeAll(async() =>{
@@ -75,6 +76,16 @@ describe("GET /api/transactions", () =>{
         });
       expect(res.body.transaction.id).toEqual("tranId3");
       expect(res.status).toEqual(200);
+    });
+  });
+  describe("user id does not have a transaction that pertain to it", ()=>{
+    it("should return error object", async() =>{
+      await expect(async() => {
+        await searchQueryTrans();
+      }).rejects.toMatchObject({
+        statusCode: 500,
+        message: "orm tool failed"
+      });
     });
   });
 });
