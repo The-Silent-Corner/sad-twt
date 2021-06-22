@@ -21,15 +21,26 @@ describe("creating a transaction in model", () =>{
   });
 });
 describe("transaction id already exists", () =>{
-  it("should return false", async() =>{
-    await createTransaction("transactionId", 133234, "appId");
-    const transaction2 = await createTransaction("transactionId", 133234, "appId");
-    expect(transaction2).toEqual(false);
+  it("should throw with 409", async() =>{
+    await expect(async() => {
+      await createTransaction("transactionId", 133234, "appId");
+    })
+      .rejects
+      .toMatchObject({
+        statusCode: 409,
+        message: "transaction already exists"
+      });
   });
 });
 describe("amount is not provided", () =>{
-  it("should return false", async() =>{
-    const transaction = await createTransaction("transactionId", "appId");
-    expect(transaction).toEqual(false);
+  it("should throw with 500", async() =>{
+    await expect(async() => {
+      await createTransaction("anotherId", "appId");
+    })
+      .rejects
+      .toMatchObject({
+        statusCode: 500,
+        message: "orm tool failed"
+      });
   });
 });
