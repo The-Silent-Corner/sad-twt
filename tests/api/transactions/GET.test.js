@@ -8,12 +8,13 @@ const createAppointment = require("../../../helpers/Appointments/createAppointme
 const createTransaction = require("../../../helpers/Transactions/createTransaction");
 const searchQueryTrans = require("../../../helpers/Transactions/searchQueryTrans");
 
-let studentIdCookie, tutorIdCookie, foobarCookie;
+let studentIdCookie, tutorIdCookie, foobarCookie, wrongIdCookie;
 beforeAll(async() =>{
   await createTables();
   await createUser("studentId", "student@email.com", "password", "student");
   await createUser("tutorId", "tutor@email.com", "password", "tutor");
   await createUser("foobar", "foobar@email.com", "password", "student");
+  await createUser("wrongId", "wrongId@email.com", "password", "student");
   await createCourse("courseId", "tutorId", "Math", 23, 23);
   await createAppointment("appId", "campus", "courseId", "studentId", "tutorId");
   await createAppointment("appId2", "campus", "courseId", "studentId", "tutorId");
@@ -24,6 +25,7 @@ beforeAll(async() =>{
   tutorIdCookie = `user=${await jwtGen("tutorId", "tutor")}`;
   studentIdCookie = `user=${await jwtGen("studentId", "student")}`;
   foobarCookie = `user=${await jwtGen("foobar", "student")}`;
+  wrongIdCookie = `user=${await jwtGen("wrongId", "student")}`;
 });
 afterAll(async() =>{
   await wipeDBTables();
@@ -81,7 +83,11 @@ describe("GET /api/transactions", () =>{
   describe("user id does not have a transaction that pertain to it", ()=>{
     it("should return error object", async() =>{
       await expect(async() => {
-        await searchQueryTrans();
+        // await searchQueryTrans();
+        const res = await request(app)
+          .get("/api/transactions")
+          .set("Accept", "application/json")
+          .set("Cookie", [wrongIdCookie]);
       }).rejects.toMatchObject({
         statusCode: 500,
         message: "orm tool failed"
