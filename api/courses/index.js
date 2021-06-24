@@ -50,14 +50,15 @@ router.put("/", loginMiddleware, async(req, res) =>{
   return res.status(200).json({ course: course });
 });
 router.delete("/", loginMiddleware, async(req, res)=>{
-  const { courseId, tutorId } = req.body;
-  if(!courseId && !tutorId) {
+  const { courseId } = req.body;
+  if(!courseId) {
     return res.sendStatus(400);
   }
-  const course = await deleteCourse(courseId, tutorId);
-  if(!course) {
-    return res.sendStatus(500);
+  try {
+    await deleteCourse(courseId);
+    return res.sendStatus(204);
+  } catch(err) {
+    res.status(err.statusCode).json({ message: err.message });
   }
-  return res.sendStatus(200);
 });
 module.exports = router;
