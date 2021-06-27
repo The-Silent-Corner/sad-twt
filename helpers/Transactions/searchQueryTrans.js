@@ -19,6 +19,7 @@ async function searchQueryTrans(userId) {
     return user;
   }catch(err)
   {
+    console.log("hello");
     throw {
       statusCode: 500,
       message: "orm tool failed"

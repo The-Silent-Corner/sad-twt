@@ -6,9 +6,8 @@ const createUser = require("../../../helpers/Users/createUser");
 const createCourse = require("../../../helpers/Courses/createCourse");
 const createAppointment = require("../../../helpers/Appointments/createAppointment");
 const createTransaction = require("../../../helpers/Transactions/createTransaction");
-const searchQueryTrans = require("../../../helpers/Transactions/searchQueryTrans");
 
-let studentIdCookie, tutorIdCookie, foobarCookie, wrongIdCookie;
+let studentIdCookie, tutorIdCookie, foobarCookie, userNoTransaction;
 beforeAll(async() =>{
   await createTables();
   await createUser("studentId", "student@email.com", "password", "student");
@@ -25,7 +24,7 @@ beforeAll(async() =>{
   tutorIdCookie = `user=${await jwtGen("tutorId", "tutor")}`;
   studentIdCookie = `user=${await jwtGen("studentId", "student")}`;
   foobarCookie = `user=${await jwtGen("foobar", "student")}`;
-  wrongIdCookie = `user=${await jwtGen("wrongId", "student")}`;
+  userNoTransaction = `user=${await jwtGen("wrongId", "parent")}`;
 });
 afterAll(async() =>{
   await wipeDBTables();
@@ -81,17 +80,13 @@ describe("GET /api/transactions", () =>{
     });
   });
   describe("user id does not have a transaction that pertain to it", ()=>{
-    it("should return error object", async() =>{
-      await expect(async() => {
-        // await searchQueryTrans();
-        const res = await request(app)
-          .get("/api/transactions")
-          .set("Accept", "application/json")
-          .set("Cookie", [wrongIdCookie]);
-      }).rejects.toMatchObject({
-        statusCode: 500,
-        message: "orm tool failed"
-      });
+    it("should return an empty list", async() =>{
+      const res = await request(app)
+        .get("/api/transactions")
+        .set("Accept", "application/json")
+        .set("Cookie", [userNoTransaction]);
+      expect(res.body.list.length).toEqual(0);
+      expect(res.status).toEqual(200);
     });
   });
 });

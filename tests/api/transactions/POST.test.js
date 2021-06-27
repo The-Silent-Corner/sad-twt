@@ -1,12 +1,10 @@
 const request = require("supertest");
 const app = require("../../../app");
 const { createTables, wipeDBTables } = require("../../../db/databaseHelpers.js");
-const { Transactions } = require("../../../db/Models");
 const jwtGen = require("../../../helpers/jwtGenerate");
 const createUser = require("../../../helpers/Users/createUser");
 const createCourse = require("../../../helpers/Courses/createCourse");
 const createAppointment = require("../../../helpers/Appointments/createAppointment");
-const { TransactionStatus } = require("../../../statusConstants");
 
 let authCookie;
 beforeAll(async() =>{
