@@ -7,12 +7,13 @@ const createCourse = require("../../../helpers/Courses/createCourse");
 const createAppointment = require("../../../helpers/Appointments/createAppointment");
 const createTransaction = require("../../../helpers/Transactions/createTransaction");
 
-let studentIdCookie, tutorIdCookie, foobarCookie;
+let studentIdCookie, tutorIdCookie, foobarCookie, userNoTransaction;
 beforeAll(async() =>{
   await createTables();
   await createUser("studentId", "student@email.com", "password", "student");
   await createUser("tutorId", "tutor@email.com", "password", "tutor");
   await createUser("foobar", "foobar@email.com", "password", "student");
+  await createUser("wrongId", "wrongId@email.com", "password", "student");
   await createCourse("courseId", "tutorId", "Math", 23, 23);
   await createAppointment("appId", "campus", "courseId", "studentId", "tutorId");
   await createAppointment("appId2", "campus", "courseId", "studentId", "tutorId");
@@ -23,6 +24,7 @@ beforeAll(async() =>{
   tutorIdCookie = `user=${await jwtGen("tutorId", "tutor")}`;
   studentIdCookie = `user=${await jwtGen("studentId", "student")}`;
   foobarCookie = `user=${await jwtGen("foobar", "student")}`;
+  userNoTransaction = `user=${await jwtGen("wrongId", "parent")}`;
 });
 afterAll(async() =>{
   await wipeDBTables();
@@ -74,6 +76,16 @@ describe("GET /api/transactions", () =>{
           q: "tranId3"
         });
       expect(res.body.transaction.id).toEqual("tranId3");
+      expect(res.status).toEqual(200);
+    });
+  });
+  describe("user id does not have a transaction that pertain to it", ()=>{
+    it("should return an empty list", async() =>{
+      const res = await request(app)
+        .get("/api/transactions")
+        .set("Accept", "application/json")
+        .set("Cookie", [userNoTransaction]);
+      expect(res.body.list.length).toEqual(0);
       expect(res.status).toEqual(200);
     });
   });
